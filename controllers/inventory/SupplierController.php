@@ -1,0 +1,110 @@
+<?php
+class SupplierController extends Controller{
+	public function __construct(){
+	}
+	public function index(){
+		view("inventory");
+	}
+	public function create(){
+		view("inventory");
+	}
+public function save($data,$file){
+	if(isset($data["create"])){
+	$errors=[];
+/*
+	if(!preg_match("/^[\s\S]+$/",$_POST["txtName"])){
+		$errors["name"]="Invalid name";
+	}
+	if(!preg_match("/^[\s\S]+$/",$_POST["txtContactPerson"])){
+		$errors["contact_person"]="Invalid contact_person";
+	}
+	if(!preg_match("/^[\s\S]+$/",$_POST["txtPhone"])){
+		$errors["phone"]="Invalid phone";
+	}
+	if(!is_valid_email($data["email"])){
+		$errors["email"]="Invalid email";
+	}
+	if(!preg_match("/^[\s\S]+$/",$_POST["txtAddress"])){
+		$errors["address"]="Invalid address";
+	}
+	if(!preg_match("/^[\s\S]+$/",$data["status"])){
+		$errors["status"]="Invalid status";
+	}
+
+*/
+		if(count($errors)==0){
+			$supplier=new Supplier();
+		$supplier->name=$data["name"];
+		$supplier->contact_person=$data["contact_person"];
+		$supplier->phone=$data["phone"];
+		$supplier->email=$data["email"];
+		$supplier->address=$data["address"];
+		$supplier->status=$data["status"];
+		$supplier->created_at=$data["created_at"];
+		$supplier->updated_at=$data["updated_at"];
+
+			$supplier->save();
+		redirect();
+		}else{
+			 print_r($errors);
+		}
+	}
+}
+public function edit($id){
+		view("inventory",Supplier::find($id));
+}
+public function update($data,$file){
+	if(isset($data["update"])){
+	$errors=[];
+/*
+	if(!preg_match("/^[\s\S]+$/",$_POST["txtName"])){
+		$errors["name"]="Invalid name";
+	}
+	if(!preg_match("/^[\s\S]+$/",$_POST["txtContactPerson"])){
+		$errors["contact_person"]="Invalid contact_person";
+	}
+	if(!preg_match("/^[\s\S]+$/",$_POST["txtPhone"])){
+		$errors["phone"]="Invalid phone";
+	}
+	if(!is_valid_email($data["email"])){
+		$errors["email"]="Invalid email";
+	}
+	if(!preg_match("/^[\s\S]+$/",$_POST["txtAddress"])){
+		$errors["address"]="Invalid address";
+	}
+	if(!preg_match("/^[\s\S]+$/",$data["status"])){
+		$errors["status"]="Invalid status";
+	}
+
+*/
+		if(count($errors)==0){
+			$supplier=new Supplier();
+			$supplier->id=$data["id"];
+		$supplier->name=$data["name"];
+		$supplier->contact_person=$data["contact_person"];
+		$supplier->phone=$data["phone"];
+		$supplier->email=$data["email"];
+		$supplier->address=$data["address"];
+		$supplier->status=$data["status"];
+		$supplier->created_at=$data["created_at"];
+		$supplier->updated_at=$data["updated_at"];
+
+		$supplier->update();
+		redirect();
+		}else{
+			 print_r($errors);
+		}
+	}
+}
+	public function confirm($id){
+		view("inventory");
+	}
+	public function delete($id){
+		Supplier::delete($id);
+		redirect();
+	}
+	public function show($id){
+		view("inventory",Supplier::find($id));
+	}
+}
+?>

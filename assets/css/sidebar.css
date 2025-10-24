@@ -1,0 +1,16 @@
+.sub-menu {
+  display: none;
+  padding-left: 20px;
+}
+.sub-menu.open {
+  display: block;
+}
+.menu-item-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+.sub-menu-item {
+  margin: 5px 0;
+}
