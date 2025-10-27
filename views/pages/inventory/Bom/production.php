@@ -2,23 +2,67 @@
 <html lang="bn">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>BOM + Expense | Production Management System</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
   <style>
     @media print {
-      body * { visibility: hidden; }
-      #bomPrintSection, #bomPrintSection * { visibility: visible; }
-      #bomPrintSection { position: absolute; left: 0; top: 0; width: 100%; }
-      .sidebar, .navbar, .header, .btn, .footer { display: none !important; }
-      .back_list { display: none !important; }
+      body * {
+        visibility: hidden;
+      }
+
+      #bomPrintSection,
+      #bomPrintSection * {
+        visibility: visible;
+      }
+
+      #bomPrintSection {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+      }
+
+      .sidebar,
+      .navbar,
+      .header,
+      .btn,
+      .footer,
+      .back_list {
+        display: none !important;
+      }
     }
-    body { background: #f5f7fa; font-family: "Segoe UI", sans-serif; }
-    .card { border: none; border-radius: 12px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08); }
-    .card-header { background: #0a66c2; color: #fff; border-radius: 12px 12px 0 0; }
-    .table th { background: #eef2f7; font-size: 13px; text-transform: uppercase; }
-    .summary-box { background: #fff; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); padding: 20px; }
+
+    body {
+      background: #f5f7fa;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    .card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    .card-header {
+      background: #0a66c2;
+      color: #fff;
+      border-radius: 12px 12px 0 0;
+    }
+
+    .table th {
+      background: #eef2f7;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    .summary-box {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      padding: 20px;
+    }
   </style>
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 </head>
@@ -33,22 +77,25 @@
         </div>
         <div class="card-body">
           <form id="bomForm">
+            <!-- Hidden input for product_id -->
+            <input type="hidden" id="product_id" name="product_id" value="<?= $bom->product_id ?>">
+
+            <!-- <?php var_dump($bom->product_id); ?> -->
             <div class="row g-3 mb-4">
               <div class="col-md-6">
                 <label class="form-label fw-semibold">Product Name</label>
-                <input type="text" name="product_name" class="form-control" value="<?php
-                  $product = Product::find($bom->product_id);
-                  echo $product->name;
-                ?>">
+                <input type="text" name="product_name" class="form-control" id="product_name" value="<?php
+                                                                                                      $product = Product::find($bom->product_id);
+                                                                                                      echo htmlspecialchars($product->name);
+                                                                                                      ?>">
               </div>
               <div class="col-md-3">
                 <label class="form-label fw-semibold">Product Code</label>
-                <input type="text" name="product_code" class="form-control" value="<?php echo $bom->bom_code ?>">
+                <input type="text" name="product_code" class="form-control" value="<?php echo htmlspecialchars($bom->bom_code) ?>">
               </div>
               <div class="col-md-3">
                 <label class="form-label fw-semibold">Production Quantity</label>
-                <input type="number" id="productQty" name="product_qty" class="form-control fw-semibold text-end"
-                  min="1" value="<?= $productQty ?? 1 ?>">
+                <input type="number" id="productQty" name="product_qty" class="form-control fw-semibold text-end" min="1" value="<?= $productQty ?? 1 ?>">
               </div>
             </div>
 
@@ -79,14 +126,14 @@
                     $total = $qty * $unit_cost;
                     $grand_total += $total;
                   ?>
-                  <tr>
-                    <td class="text-center"><?php echo $count++; ?></td>
-                    <td><?php echo htmlspecialchars($product_name); ?></td>
-                    <td class="text-end"><?php echo number_format($qty, 2); ?></td>
-                    <td class="text-center"><?php echo htmlspecialchars($uom); ?></td>
-                    <td class="text-end"><?php echo number_format($unit_cost, 2); ?></td>
-                    <td class="text-end"><?php echo number_format($total, 2); ?></td>
-                  </tr>
+                    <tr data-product-id="<?= $product->id ?>">
+                      <td class="text-center"><?php echo $count++; ?></td>
+                      <td><?php echo htmlspecialchars($product_name); ?></td>
+                      <td class="text-end"><?php echo number_format($qty, 2); ?></td>
+                      <td class="text-center"><?php echo htmlspecialchars($uom); ?></td>
+                      <td class="text-end"><?php echo number_format($unit_cost, 2); ?></td>
+                      <td class="text-end"><?php echo number_format($total, 2); ?></td>
+                    </tr>
                   <?php endforeach; ?>
                 </tbody>
                 <tfoot>
@@ -143,7 +190,7 @@
                   <h5 id="totalExtraCost" class="text-warning">৳ 0.00</h5>
                 </div>
               </div>
-              <hr>
+              <hr />
               <div class="row">
                 <div class="col-md-6">
                   <h5 class="fw-semibold text-dark">🔹Total Production Cost:</h5>
@@ -155,7 +202,7 @@
             </div>
 
             <div class="text-end mt-4">
-              <button type="button" class="btn-success create"  id="saveBtn">➕ Save Production</button>
+              <button type="button" class="btn-success create" id="saveBtn">➕ Save Production</button>
               <button type="button" class="btn btn-primary fs-5 mx-5 px-5 px-4" onclick="window.print()">Print BOM</button>
             </div>
           </form>
@@ -164,59 +211,156 @@
     </div>
   </div>
 
-<script>
-$(document).ready(function() {
-  // Save base data
-  $("#bomTable tbody tr").each(function () {
-    let qty = parseFloat($(this).find("td:eq(2)").text().replace(/,/g,"")) || 0;
-    let cost = parseFloat($(this).find("td:eq(4)").text().replace(/,/g,"")) || 0;
-    $(this).attr("data-base-qty", qty);
-    $(this).attr("data-unit-cost", cost);
-  });
-  function parseBdtAmount(text) { return parseFloat(text.replace(/[৳,]/g, '')) || 0; }
-  $("#laborCost").attr("data-base", parseBdtAmount($("#laborCost").text()));
-  $("#overheadCost").attr("data-base", parseBdtAmount($("#overheadCost").text()));
-  $("#packagingCost").attr("data-base", parseBdtAmount($("#packagingCost").text()));
-  $("#transportCost").attr("data-base", parseBdtAmount($("#transportCost").text()));
+  <script>
+    $(document).ready(function() {
+      // 1. মূল ডেটা সেটিং (বেস মান)
+      $("#bomTable tbody tr").each(function() {
+        let qty = parseFloat($(this).find("td:eq(2)").text().replace(/,/g, "")) || 0;
+        let cost = parseFloat($(this).find("td:eq(4)").text().replace(/,/g, "")) || 0;
+        $(this).attr("data-base-qty", qty);
+        $(this).attr("data-unit-cost", cost);
+      });
 
-  function calculateTotals() {
-    let qty = parseFloat($("#productQty").val()) || 1;
-    let materialGrandTotal = 0;
-    $("#bomTable tbody tr").each(function () {
-      let baseQty = parseFloat($(this).attr("data-base-qty")) || 0;
-      let unitCost = parseFloat($(this).attr("data-unit-cost")) || 0;
-      let newQty = baseQty * qty;
-      let newTotal = newQty * unitCost;
-      $(this).find("td:eq(2)").text(newQty.toFixed(2));
-      $(this).find("td:eq(5)").text(newTotal.toFixed(2));
-      materialGrandTotal += newTotal;
+      // 2. টাকা বা ৳ পার্সিং ফাংশন
+      function parseBdtAmount(text) {
+        return parseFloat(text.replace(/[৳,]/g, '')) || 0;
+      }
+
+      // 3. ডাইনামিক ডেটা সেটিং
+      $("#laborCost").attr("data-base", parseBdtAmount($("#laborCost").text()));
+      $("#overheadCost").attr("data-base", parseBdtAmount($("#overheadCost").text()));
+      $("#packagingCost").attr("data-base", parseBdtAmount($("#packagingCost").text()));
+      $("#transportCost").attr("data-base", parseBdtAmount($("#transportCost").text()));
+
+      // 4. হিসাব ফাংশন
+      function calculateTotals() {
+        let qty = parseFloat($("#productQty").val()) || 1;
+        let materialGrandTotal = 0;
+
+        $("#bomTable tbody tr").each(function() {
+          let baseQty = parseFloat($(this).attr("data-base-qty")) || 0;
+          let unitCost = parseFloat($(this).attr("data-unit-cost")) || 0;
+          let newQty = baseQty * qty;
+          let newTotal = newQty * unitCost;
+
+          $(this).find("td:eq(2)").text(newQty.toFixed(2));
+          $(this).find("td:eq(5)").text(newTotal.toFixed(2));
+          materialGrandTotal += newTotal;
+        });
+
+        $("#tfootMaterialTotal").text(materialGrandTotal.toFixed(2));
+        $("#totalMaterialCost").text(materialGrandTotal.toFixed(2));
+
+        // অতিরিক্ত খরচ
+        let labor = parseFloat($("#laborCost").attr("data-base")) * qty;
+        let overhead = parseFloat($("#overheadCost").attr("data-base")) * qty;
+        let packaging = parseFloat($("#packagingCost").attr("data-base")) * qty;
+        let transport = parseFloat($("#transportCost").attr("data-base")) * qty;
+
+        $("#laborCost").text("৳ " + labor.toFixed(2));
+        $("#overheadCost").text("৳ " + overhead.toFixed(2));
+        $("#packagingCost").text("৳ " + packaging.toFixed(2));
+        $("#transportCost").text("৳ " + transport.toFixed(2));
+
+        let totalExtra = labor + overhead + packaging + transport;
+        $("#totalExtraCost").text("৳ " + totalExtra.toFixed(2));
+
+        // মোট খরচ
+        let grandTotal = materialGrandTotal + totalExtra;
+        $("#grandTotal").text("৳ " + grandTotal.toFixed(2));
+      }
+
+      // 5. ইনপুট পরিবর্তনে হিসাব আপডেট
+      $(document).on("input", "#productQty", calculateTotals);
+      calculateTotals();
+
+      // 6. ডেটা পাঠানোর জন্য
+      $("#saveBtn").on("click", function() {
+        // প্রোডাক্টের নাম ও কোড
+        let product_name = $("#product_name").val();
+        let product_code = $("input[name='product_code']").val();
+
+
+        // product_id from hidden input
+        let product_id = parseInt($("#product_id").val());
+        if (isNaN(product_id)) {
+          alert("প্রোডাক্ট আইডি নেই বা ভুল");
+          return;
+        }
+
+        // ডেটা যাচাই
+        if (!product_id) {
+          alert("প্রোডাক্ট আইডি নেই। দয়া করে নিশ্চিত করুন যে, এটি ডেটা পাঠানো হচ্ছে।");
+          return;
+        }
+
+        // উপাদান ডেটা সংগ্রহ
+        let components = [];
+        $("#bomTable tbody tr").each(function() {
+          let productName = $(this).find("td:eq(1)").text().trim();
+          let qty = parseFloat($(this).find("td:eq(2)").text().replace(/,/g, "")) || 0;
+          let uom = $(this).find("td:eq(3)").text().trim();
+          let unitCost = parseFloat($(this).find("td:eq(4)").text().replace(/,/g, "")) || 0;
+          let total = parseFloat($(this).find("td:eq(5)").text().replace(/,/g, "")) || 0;
+
+
+          components.push({
+            id: $(this).data("product-id"),
+            produced_qty: parseFloat($(this).find("td:eq(2)").text().replace(/,/g, "")) || 0,
+            qty: parseFloat($(this).find("td:eq(2)").text().replace(/,/g, "")) || 0,
+            operator_name: "", // optional, backend default ""
+            remarks: "", // optional
+            warehouse_id: 1
+          });
+
+          console.log("Components:", components);
+        });
+
+        // অতিরিক্ত খরচের মান
+        let labor = parseBdtAmount($("#laborCost").text());
+        let overhead = parseBdtAmount($("#overheadCost").text());
+        let packaging = parseBdtAmount($("#packagingCost").text());
+        let transport = parseBdtAmount($("#transportCost").text());
+
+        // মোট খরচ
+        let total_cost = labor + overhead + packaging + transport + components.reduce((a, b) => a + b.total, 0);
+        let produced_qty = parseFloat($("#productQty").val()) || 1;
+
+        if (isNaN(produced_qty)) {
+          produced_qty = 1;
+        }
+        // ডেটা অবজেক্ট পাঠানো
+        let data = {
+          product_name,
+          product_id: parseInt($("#product_id").val()),
+          product_code,
+          produced_qty: produced_qty,
+          components,
+          total_cost
+        };
+
+        console.log(data);
+        // console.log("product_id value before sending:", $("#product_id").val());
+
+        // AJAX কল
+        $.ajax({
+          url: "<?= $base_url ?>/api/production/save",
+          type: "POST",
+          data: JSON.stringify(data),
+          contentType: "application/json",
+
+          success: function(res) {
+            console.log("Sending payload:", data);
+            alert("প্রোডাকশন সফলভাবে সংরক্ষিত হয়েছে!");
+          },
+          error: function(err) {
+            console.error("AJAX Error:", err);
+            alert("সঞ্চয় করতে সমস্যা হয়েছে, কনসোলে দেখুন।");
+          }
+        });
+      });
     });
-    $("#tfootMaterialTotal").text(materialGrandTotal.toFixed(2));
-    $("#totalMaterialCost").text(materialGrandTotal.toFixed(2));
-
-    // Expenses
-    let labor = parseFloat($("#laborCost").attr("data-base")) * qty;
-    let overhead = parseFloat($("#overheadCost").attr("data-base")) * qty;
-    let packaging = parseFloat($("#packagingCost").attr("data-base")) * qty;
-    let transport = parseFloat($("#transportCost").attr("data-base")) * qty;
-
-    $("#laborCost").text("৳ " + labor.toFixed(2));
-    $("#overheadCost").text("৳ " + overhead.toFixed(2));
-    $("#packagingCost").text("৳ " + packaging.toFixed(2));
-    $("#transportCost").text("৳ " + transport.toFixed(2));
-
-    let totalExtra = labor + overhead + packaging + transport;
-    $("#totalExtraCost").text("৳ " + totalExtra.toFixed(2));
-
-    let grandTotal = materialGrandTotal + totalExtra;
-    $("#grandTotal").text("৳ " + grandTotal.toFixed(2));
-  }
-
-  // Trigger
-  $(document).on("input", "#productQty", calculateTotals);
-  calculateTotals(); // initial
-});
-</script>
-
+  </script>
 </body>
+
 </html>

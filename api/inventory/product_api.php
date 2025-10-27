@@ -23,6 +23,7 @@ class ProductApi{
 		$product->category_id=$data["category_id"];
 		$product->uom_id=$data["uom_id"];
 		$product->description=$data["description"];
+		$product->is_raw=$data["is_raw"];
 		$product->brand=$data["brand"];
 		$product->sku=$data["sku"];
 		$product->image=$data["image"];
@@ -38,6 +39,7 @@ class ProductApi{
 		$product->category_id=$data["category_id"];
 		$product->uom_id=$data["uom_id"];
 		$product->description=$data["description"];
+		$product->is_raw=$data["is_raw"];
 		$product->brand=$data["brand"];
 		$product->sku=$data["sku"];
 		$product->image=$data["image"];

@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Oct 24, 2025 at 10:11 PM
--- Server version: 8.4.3
--- PHP Version: 8.3.26
+-- Generation Time: Oct 26, 2025 at 10:20 PM
+-- Server version: 8.0.30
+-- PHP Version: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -258,37 +258,40 @@ INSERT INTO `core_order_details` (`id`, `order_id`, `product_id`, `qty`, `price`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `core_production_log`
+-- Table structure for table `core_productions`
 --
 
-CREATE TABLE `core_production_log` (
+CREATE TABLE `core_productions` (
   `id` int NOT NULL,
-  `production_order_id` int NOT NULL,
-  `shift` varchar(50) DEFAULT NULL,
+  `product_id` int NOT NULL,
   `produced_qty` decimal(10,2) NOT NULL,
-  `operator_name` varchar(100) DEFAULT NULL,
-  `log_date` timestamp NULL DEFAULT NULL,
-  `remarks` text,
+  `start_date` date DEFAULT NULL,
+  `end_date` date DEFAULT NULL,
+  `created_by` int DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `core_productions`
+--
+
+INSERT INTO `core_productions` (`id`, `product_id`, `produced_qty`, `start_date`, `end_date`, `created_by`, `created_at`, `updated_at`) VALUES
+(1, 1, 0.00, '2025-10-27', '2025-10-27', 1, '2025-10-26 22:06:00', '2025-10-26 22:06:00'),
+(2, 1, 0.00, '2025-10-27', '2025-10-27', 1, '2025-10-26 22:15:03', '2025-10-26 22:15:03');
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `core_production_orders`
+-- Table structure for table `core_production_details`
 --
 
-CREATE TABLE `core_production_orders` (
+CREATE TABLE `core_production_details` (
   `id` int NOT NULL,
-  `order_id` int NOT NULL,
-  `product_id` int NOT NULL,
-  `planned_qty` decimal(10,2) NOT NULL,
+  `production_id` int NOT NULL,
   `produced_qty` decimal(10,2) NOT NULL,
-  `status` enum('Pending','In_Progress','Completed') DEFAULT 'Pending',
-  `start_date` date DEFAULT NULL,
-  `end_date` date DEFAULT NULL,
-  `created_by` int DEFAULT NULL,
+  `operator_name` varchar(100) DEFAULT NULL,
+  `remarks` text,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -322,7 +325,7 @@ CREATE TABLE `core_products` (
 --
 
 INSERT INTO `core_products` (`id`, `name`, `category_id`, `uom_id`, `description`, `is_raw`, `brand`, `price`, `sku`, `tax`, `image`, `stock_qty`, `purchase_price`, `created_at`, `updated_at`) VALUES
-(1, 'Lithium Battery', 1, 4, 'Rechargeable lithium battery', 1, 'TechParts', 500.00, 'ELEC-R01', 0.00, NULL, 500, 400.00, '2025-10-24 19:16:08', '2025-10-24 19:16:08'),
+(1, 'Lithium Battery', 1, 4, 'Rechargeable lithium battery', 1, 'TechParts', 500.00, 'ELEC-R01', 0.00, '', 502, 400.00, '2025-10-24 19:16:08', '2025-10-24 19:16:08'),
 (2, 'Smartphone Screen', 1, 4, '6.5 inch AMOLED display', 1, 'TechParts', 2000.00, 'ELEC-R02', 0.00, '', 301, 1800.00, '2025-10-24 19:16:08', '2025-10-24 20:22:35'),
 (3, 'Plastic Casing', 1, 4, 'Smartphone casing', 1, 'TechParts', 300.00, 'ELEC-R03', 0.00, NULL, 400, 250.00, '2025-10-24 19:16:08', '2025-10-24 19:16:08'),
 (4, 'Smartphone X100', 1, 4, 'Assembled smartphone using battery, screen & casing', 0, 'TechBrand', 35000.00, 'ELEC-001', 0.00, '', 47, 30000.00, '2025-10-24 19:16:08', '2025-10-24 20:38:38'),
@@ -505,7 +508,9 @@ INSERT INTO `core_stocks` (`id`, `product_id`, `qty`, `transaction_type_id`, `re
 (9, 5, 1, 2, 'Order #7', '2025-10-24 20:49:21', 1, '2025-10-24 20:49:21', 12345),
 (10, 5, 6, 2, 'Order #8', '2025-10-24 20:51:45', 1, '2025-10-24 20:51:45', 12345),
 (11, 5, -10, 2, 'Order #9', '2025-10-24 20:53:51', 1, '2025-10-24 20:53:51', 12345),
-(12, 5, -1, 2, 'Order #10', '2025-10-24 20:55:57', 1, '2025-10-24 20:55:57', 12345);
+(12, 5, -1, 2, 'Order #10', '2025-10-24 20:55:57', 1, '2025-10-24 20:55:57', 12345),
+(13, 1, 1, 1, 'Produced via production #1', '2025-10-26 22:06:00', 1, '2025-10-26 22:06:00', 12345),
+(14, 1, 1, 1, 'Produced via production #2', '2025-10-26 22:15:03', 1, '2025-10-26 22:15:03', 12345);
 
 -- --------------------------------------------------------
 
@@ -667,10 +672,10 @@ INSERT INTO `core_warehouses` (`id`, `name`, `location`, `status`, `created_at`,
 
 CREATE TABLE `pma__bookmark` (
   `id` int UNSIGNED NOT NULL,
-  `dbase` varchar(255) COLLATE utf8mb3_bin NOT NULL DEFAULT '',
-  `user` varchar(255) COLLATE utf8mb3_bin NOT NULL DEFAULT '',
+  `dbase` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '',
+  `user` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '',
   `label` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL DEFAULT '',
-  `query` text COLLATE utf8mb3_bin NOT NULL
+  `query` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin COMMENT='Bookmarks';
 
 -- --------------------------------------------------------
@@ -680,14 +685,14 @@ CREATE TABLE `pma__bookmark` (
 --
 
 CREATE TABLE `pma__central_columns` (
-  `db_name` varchar(64) COLLATE utf8mb3_bin NOT NULL,
-  `col_name` varchar(64) COLLATE utf8mb3_bin NOT NULL,
-  `col_type` varchar(64) COLLATE utf8mb3_bin NOT NULL,
-  `col_length` text COLLATE utf8mb3_bin,
-  `col_collation` varchar(64) COLLATE utf8mb3_bin NOT NULL,
+  `db_name` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `col_name` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `col_type` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `col_length` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin,
+  `col_collation` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
   `col_isNull` tinyint(1) NOT NULL,
-  `col_extra` varchar(255) COLLATE utf8mb3_bin DEFAULT '',
-  `col_default` text COLLATE utf8mb3_bin
+  `col_extra` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT '',
+  `col_default` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin COMMENT='Central list of columns';
 
 -- --------------------------------------------------------
@@ -698,15 +703,15 @@ CREATE TABLE `pma__central_columns` (
 
 CREATE TABLE `pma__column_info` (
   `id` int UNSIGNED NOT NULL,
-  `db_name` varchar(64) COLLATE utf8mb3_bin NOT NULL DEFAULT '',
-  `table_name` varchar(64) COLLATE utf8mb3_bin NOT NULL DEFAULT '',
-  `column_name` varchar(64) COLLATE utf8mb3_bin NOT NULL DEFAULT '',
+  `db_name` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '',
+  `table_name` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '',
+  `column_name` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '',
   `comment` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL DEFAULT '',
   `mimetype` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL DEFAULT '',
-  `transformation` varchar(255) COLLATE utf8mb3_bin NOT NULL DEFAULT '',
-  `transformation_options` varchar(255) COLLATE utf8mb3_bin NOT NULL DEFAULT '',
-  `input_transformation` varchar(255) COLLATE utf8mb3_bin NOT NULL DEFAULT '',
-  `input_transformation_options` varchar(255) COLLATE utf8mb3_bin NOT NULL DEFAULT ''
+  `transformation` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '',
+  `transformation_options` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '',
+  `input_transformation` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '',
+  `input_transformation_options` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin COMMENT='Column information for phpMyAdmin';
 
 -- --------------------------------------------------------
@@ -716,8 +721,8 @@ CREATE TABLE `pma__column_info` (
 --
 
 CREATE TABLE `pma__designer_settings` (
-  `username` varchar(64) COLLATE utf8mb3_bin NOT NULL,
-  `settings_data` text COLLATE utf8mb3_bin NOT NULL
+  `username` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `settings_data` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin COMMENT='Settings related to Designer';
 
 -- --------------------------------------------------------
@@ -728,10 +733,10 @@ CREATE TABLE `pma__designer_settings` (
 
 CREATE TABLE `pma__export_templates` (
   `id` int UNSIGNED NOT NULL,
-  `username` varchar(64) COLLATE utf8mb3_bin NOT NULL,
-  `export_type` varchar(10) COLLATE utf8mb3_bin NOT NULL,
-  `template_name` varchar(64) COLLATE utf8mb3_bin NOT NULL,
-  `template_data` text COLLATE utf8mb3_bin NOT NULL
+  `username` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `export_type` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `template_name` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `template_data` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin COMMENT='Saved export templates';
 
 -- --------------------------------------------------------
@@ -741,8 +746,8 @@ CREATE TABLE `pma__export_templates` (
 --
 
 CREATE TABLE `pma__favorite` (
-  `username` varchar(64) COLLATE utf8mb3_bin NOT NULL,
-  `tables` text COLLATE utf8mb3_bin NOT NULL
+  `username` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `tables` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin COMMENT='Favorite tables';
 
 -- --------------------------------------------------------
@@ -753,11 +758,11 @@ CREATE TABLE `pma__favorite` (
 
 CREATE TABLE `pma__history` (
   `id` bigint UNSIGNED NOT NULL,
-  `username` varchar(64) COLLATE utf8mb3_bin NOT NULL DEFAULT '',
-  `db` varchar(64) COLLATE utf8mb3_bin NOT NULL DEFAULT '',
-  `table` varchar(64) COLLATE utf8mb3_bin NOT NULL DEFAULT '',
+  `username` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '',
+  `db` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '',
+  `table` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '',
   `timevalue` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `sqlquery` text COLLATE utf8mb3_bin NOT NULL
+  `sqlquery` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin COMMENT='SQL history for phpMyAdmin';
 
 -- --------------------------------------------------------
@@ -767,11 +772,11 @@ CREATE TABLE `pma__history` (
 --
 
 CREATE TABLE `pma__navigationhiding` (
-  `username` varchar(64) COLLATE utf8mb3_bin NOT NULL,
-  `item_name` varchar(64) COLLATE utf8mb3_bin NOT NULL,
-  `item_type` varchar(64) COLLATE utf8mb3_bin NOT NULL,
-  `db_name` varchar(64) COLLATE utf8mb3_bin NOT NULL,
-  `table_name` varchar(64) COLLATE utf8mb3_bin NOT NULL
+  `username` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `item_name` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `item_type` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `db_name` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `table_name` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin COMMENT='Hidden items of navigation tree';
 
 -- --------------------------------------------------------
@@ -781,7 +786,7 @@ CREATE TABLE `pma__navigationhiding` (
 --
 
 CREATE TABLE `pma__pdf_pages` (
-  `db_name` varchar(64) COLLATE utf8mb3_bin NOT NULL DEFAULT '',
+  `db_name` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '',
   `page_nr` int UNSIGNED NOT NULL,
   `page_descr` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin COMMENT='PDF relation pages for phpMyAdmin';
@@ -793,8 +798,8 @@ CREATE TABLE `pma__pdf_pages` (
 --
 
 CREATE TABLE `pma__recent` (
-  `username` varchar(64) COLLATE utf8mb3_bin NOT NULL,
-  `tables` text COLLATE utf8mb3_bin NOT NULL
+  `username` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `tables` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin COMMENT='Recently accessed tables';
 
 --
@@ -802,7 +807,7 @@ CREATE TABLE `pma__recent` (
 --
 
 INSERT INTO `pma__recent` (`username`, `tables`) VALUES
-('root', '[{\"db\":\"wdpf66_harun\",\"table\":\"core_products\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_stocks\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_transactions\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_purchases\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_purchase_details\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_order_details\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_transaction_types\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_orders\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_warehouses\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_users\"}]');
+('root', '[{\"db\":\"wdpf66_harun\",\"table\":\"core_production_details\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_productions\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_products\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_stocks\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_status\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_boms\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_bom_details\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_production_log\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_production_orders\"}]');
 
 -- --------------------------------------------------------
 
@@ -811,12 +816,12 @@ INSERT INTO `pma__recent` (`username`, `tables`) VALUES
 --
 
 CREATE TABLE `pma__relation` (
-  `master_db` varchar(64) COLLATE utf8mb3_bin NOT NULL DEFAULT '',
-  `master_table` varchar(64) COLLATE utf8mb3_bin NOT NULL DEFAULT '',
-  `master_field` varchar(64) COLLATE utf8mb3_bin NOT NULL DEFAULT '',
-  `foreign_db` varchar(64) COLLATE utf8mb3_bin NOT NULL DEFAULT '',
-  `foreign_table` varchar(64) COLLATE utf8mb3_bin NOT NULL DEFAULT '',
-  `foreign_field` varchar(64) COLLATE utf8mb3_bin NOT NULL DEFAULT ''
+  `master_db` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '',
+  `master_table` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '',
+  `master_field` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '',
+  `foreign_db` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '',
+  `foreign_table` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '',
+  `foreign_field` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin COMMENT='Relation table';
 
 -- --------------------------------------------------------
@@ -827,10 +832,10 @@ CREATE TABLE `pma__relation` (
 
 CREATE TABLE `pma__savedsearches` (
   `id` int UNSIGNED NOT NULL,
-  `username` varchar(64) COLLATE utf8mb3_bin NOT NULL DEFAULT '',
-  `db_name` varchar(64) COLLATE utf8mb3_bin NOT NULL DEFAULT '',
-  `search_name` varchar(64) COLLATE utf8mb3_bin NOT NULL DEFAULT '',
-  `search_data` text COLLATE utf8mb3_bin NOT NULL
+  `username` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '',
+  `db_name` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '',
+  `search_name` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '',
+  `search_data` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin COMMENT='Saved searches';
 
 -- --------------------------------------------------------
@@ -840,8 +845,8 @@ CREATE TABLE `pma__savedsearches` (
 --
 
 CREATE TABLE `pma__table_coords` (
-  `db_name` varchar(64) COLLATE utf8mb3_bin NOT NULL DEFAULT '',
-  `table_name` varchar(64) COLLATE utf8mb3_bin NOT NULL DEFAULT '',
+  `db_name` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '',
+  `table_name` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '',
   `pdf_page_number` int NOT NULL DEFAULT '0',
   `x` float UNSIGNED NOT NULL DEFAULT '0',
   `y` float UNSIGNED NOT NULL DEFAULT '0'
@@ -854,9 +859,9 @@ CREATE TABLE `pma__table_coords` (
 --
 
 CREATE TABLE `pma__table_info` (
-  `db_name` varchar(64) COLLATE utf8mb3_bin NOT NULL DEFAULT '',
-  `table_name` varchar(64) COLLATE utf8mb3_bin NOT NULL DEFAULT '',
-  `display_field` varchar(64) COLLATE utf8mb3_bin NOT NULL DEFAULT ''
+  `db_name` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '',
+  `table_name` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '',
+  `display_field` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin COMMENT='Table information for phpMyAdmin';
 
 -- --------------------------------------------------------
@@ -866,10 +871,10 @@ CREATE TABLE `pma__table_info` (
 --
 
 CREATE TABLE `pma__table_uiprefs` (
-  `username` varchar(64) COLLATE utf8mb3_bin NOT NULL,
-  `db_name` varchar(64) COLLATE utf8mb3_bin NOT NULL,
-  `table_name` varchar(64) COLLATE utf8mb3_bin NOT NULL,
-  `prefs` text COLLATE utf8mb3_bin NOT NULL,
+  `username` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `db_name` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `table_name` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `prefs` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
   `last_update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin COMMENT='Tables'' UI preferences';
 
@@ -880,15 +885,15 @@ CREATE TABLE `pma__table_uiprefs` (
 --
 
 CREATE TABLE `pma__tracking` (
-  `db_name` varchar(64) COLLATE utf8mb3_bin NOT NULL,
-  `table_name` varchar(64) COLLATE utf8mb3_bin NOT NULL,
+  `db_name` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `table_name` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
   `version` int UNSIGNED NOT NULL,
   `date_created` datetime NOT NULL,
   `date_updated` datetime NOT NULL,
-  `schema_snapshot` text COLLATE utf8mb3_bin NOT NULL,
-  `schema_sql` text COLLATE utf8mb3_bin,
-  `data_sql` longtext COLLATE utf8mb3_bin,
-  `tracking` set('UPDATE','REPLACE','INSERT','DELETE','TRUNCATE','CREATE DATABASE','ALTER DATABASE','DROP DATABASE','CREATE TABLE','ALTER TABLE','RENAME TABLE','DROP TABLE','CREATE INDEX','DROP INDEX','CREATE VIEW','ALTER VIEW','DROP VIEW') COLLATE utf8mb3_bin DEFAULT NULL,
+  `schema_snapshot` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `schema_sql` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin,
+  `data_sql` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin,
+  `tracking` set('UPDATE','REPLACE','INSERT','DELETE','TRUNCATE','CREATE DATABASE','ALTER DATABASE','DROP DATABASE','CREATE TABLE','ALTER TABLE','RENAME TABLE','DROP TABLE','CREATE INDEX','DROP INDEX','CREATE VIEW','ALTER VIEW','DROP VIEW') CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL,
   `tracking_active` int UNSIGNED NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin COMMENT='Database changes tracking for phpMyAdmin';
 
@@ -899,9 +904,9 @@ CREATE TABLE `pma__tracking` (
 --
 
 CREATE TABLE `pma__userconfig` (
-  `username` varchar(64) COLLATE utf8mb3_bin NOT NULL,
+  `username` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
   `timevalue` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `config_data` text COLLATE utf8mb3_bin NOT NULL
+  `config_data` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin COMMENT='User preferences storage for phpMyAdmin';
 
 --
@@ -909,7 +914,7 @@ CREATE TABLE `pma__userconfig` (
 --
 
 INSERT INTO `pma__userconfig` (`username`, `timevalue`, `config_data`) VALUES
-('root', '2025-10-24 22:11:15', '{\"Console\\/Mode\":\"collapse\"}');
+('root', '2025-10-26 22:20:52', '{\"Console\\/Mode\":\"collapse\"}');
 
 -- --------------------------------------------------------
 
@@ -918,9 +923,9 @@ INSERT INTO `pma__userconfig` (`username`, `timevalue`, `config_data`) VALUES
 --
 
 CREATE TABLE `pma__usergroups` (
-  `usergroup` varchar(64) COLLATE utf8mb3_bin NOT NULL,
-  `tab` varchar(64) COLLATE utf8mb3_bin NOT NULL,
-  `allowed` enum('Y','N') COLLATE utf8mb3_bin NOT NULL DEFAULT 'N'
+  `usergroup` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `tab` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `allowed` enum('Y','N') CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT 'N'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin COMMENT='User groups with configured menu items';
 
 -- --------------------------------------------------------
@@ -930,8 +935,8 @@ CREATE TABLE `pma__usergroups` (
 --
 
 CREATE TABLE `pma__users` (
-  `username` varchar(64) COLLATE utf8mb3_bin NOT NULL,
-  `usergroup` varchar(64) COLLATE utf8mb3_bin NOT NULL
+  `username` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `usergroup` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin COMMENT='Users and their assignments to user groups';
 
 --
@@ -981,15 +986,15 @@ ALTER TABLE `core_order_details`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `core_production_log`
+-- Indexes for table `core_productions`
 --
-ALTER TABLE `core_production_log`
+ALTER TABLE `core_productions`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `core_production_orders`
+-- Indexes for table `core_production_details`
 --
-ALTER TABLE `core_production_orders`
+ALTER TABLE `core_production_details`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1237,15 +1242,15 @@ ALTER TABLE `core_order_details`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT for table `core_production_log`
+-- AUTO_INCREMENT for table `core_productions`
 --
-ALTER TABLE `core_production_log`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+ALTER TABLE `core_productions`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `core_production_orders`
+-- AUTO_INCREMENT for table `core_production_details`
 --
-ALTER TABLE `core_production_orders`
+ALTER TABLE `core_production_details`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
@@ -1288,7 +1293,7 @@ ALTER TABLE `core_status`
 -- AUTO_INCREMENT for table `core_stocks`
 --
 ALTER TABLE `core_stocks`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `core_suppliers`
