@@ -1,22 +1,50 @@
 <style>
+	/* Table styling */
 	#bomItemsTable td,
 	#bomItemsTable th {
 		border: 1px solid #ccc;
 		vertical-align: middle;
+		color: white;
+		/* Text white */
 	}
 
 	#bomItemsTable select,
 	#bomItemsTable input {
 		width: 100%;
 		box-sizing: border-box;
+		color: white;
+		/* Input/select text white */
+		background-color: #333;
+		/* optional: dark background for contrast */
+		border: 1px solid #555;
 	}
 
 	.text-right {
 		text-align: right;
+		color: white;
+		/* text white */
 	}
 
 	.text-center {
 		text-align: center;
+		color: white;
+		/* text white */
+	}
+
+	/* Form labels */
+	label {
+		color: white;
+	}
+
+	/* Buttons text */
+	button,
+	.btn {
+		color: white;
+	}
+
+	/* Table body dynamically added rows */
+	#Items td {
+		color: white;
 	}
 </style>
 
@@ -32,8 +60,8 @@
 			<div class="col-md-4">
 				<label>Product</label>
 
-					<?= Product::html_select_finished_products("product"); ?>
-				
+				<?= Product::html_select_finished_products("product"); ?>
+
 
 			</div>
 			<div class="col-md-4">
@@ -72,7 +100,7 @@
 				<tr>
 					<td class="text-center">1</td>
 					<td><?= Product::html_select_raw("component"); ?></td>
-					<td><input type="number" class="form-control qty" value="1" min="0" readonly></td>
+					<td><input type="number" class="form-control qty" value="1" min="0"></td>
 					<td><?= Uom::html_select("uom"); ?></td>
 					<td class="price text-right">0</td>
 					<td><input type="text" class="form-control remarks" placeholder="Enter remarks"></td>

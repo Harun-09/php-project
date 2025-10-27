@@ -1,6 +1,86 @@
 <style>
-  #itemsTable tbody tr:last-child td {
-    border-bottom: 1px solid #a59c9c79;
+  /* Table text white */
+  /* Full Dark Theme Styling */
+  .purchase-form,
+  .purchase-form input,
+  .purchase-form select,
+  .purchase-form textarea,
+  #itemsTable,
+  #itemsTable th,
+  #itemsTable td {
+    background-color: #1e1e1e !important;
+    color: #fff !important;
+  }
+
+  /* Table Header Dark */
+  #itemsTable thead {
+    background-color: #2c2c2c !important;
+    color: #fff !important;
+  }
+
+  /* Inputs Dark Background */
+  .purchase-form .form-control,
+  #itemsTable input,
+  #itemsTable select,
+  #grandtotal,
+  #paid_amount,
+  .supplierAddress {
+    background-color: #111 !important;
+    color: #fff !important;
+    border: 1px solid #444 !important;
+  }
+
+  /* Placeholder Color */
+  .purchase-form ::placeholder {
+    color: #ccc !important;
+  }
+
+  /* Select Dropdown Options */
+  select option {
+    background-color: #222 !important;
+    color: #fff !important;
+  }
+
+  /* Table Border Light */
+  #itemsTable,
+  #itemsTable th,
+  #itemsTable td {
+    border: 1px solid #555 !important;
+  }
+
+  /* Buttons */
+  .btn-primary,
+  .btn-secondary,
+  .btn-success,
+  .btn-info,
+  .btn-danger {
+    color: #fff !important;
+    border: none !important;
+  }
+
+  .btn-primary {
+    background-color: #007bff !important;
+  }
+
+  .btn-secondary {
+    background-color: #6c757d !important;
+  }
+
+  .btn-success {
+    background-color: #28a745 !important;
+  }
+
+  .btn-info {
+    background-color: #17a2b8 !important;
+  }
+
+  .btn-danger {
+    background-color: #dc3545 !important;
+  }
+
+  /* Add Row Button Cell */
+  .action-cell {
+    background-color: #1e1e1e !important;
   }
 </style>
 

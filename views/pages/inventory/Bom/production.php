@@ -77,7 +77,7 @@
         </div>
         <div class="card-body">
           <form id="bomForm">
-           
+
             <input type="hidden" id="product_id" name="product_id" value="<?= $bom->product_id ?>">
 
             <!-- <?php var_dump($bom->product_id); ?> -->
@@ -213,7 +213,7 @@
 
   <script>
     $(document).ready(function() {
-      
+
       $("#bomTable tbody tr").each(function() {
         let qty = parseFloat($(this).find("td:eq(2)").text().replace(/,/g, "")) || 0;
         let cost = parseFloat($(this).find("td:eq(4)").text().replace(/,/g, "")) || 0;
@@ -225,7 +225,7 @@
         return parseFloat(text.replace(/[৳,]/g, '')) || 0;
       }
 
-      
+
       $("#laborCost").attr("data-base", parseBdtAmount($("#laborCost").text()));
       $("#overheadCost").attr("data-base", parseBdtAmount($("#overheadCost").text()));
       $("#packagingCost").attr("data-base", parseBdtAmount($("#packagingCost").text()));
@@ -249,7 +249,7 @@
         $("#tfootMaterialTotal").text(materialGrandTotal.toFixed(2));
         $("#totalMaterialCost").text(materialGrandTotal.toFixed(2));
 
-       
+
         let labor = parseFloat($("#laborCost").attr("data-base")) * qty;
         let overhead = parseFloat($("#overheadCost").attr("data-base")) * qty;
         let packaging = parseFloat($("#packagingCost").attr("data-base")) * qty;
@@ -263,35 +263,35 @@
         let totalExtra = labor + overhead + packaging + transport;
         $("#totalExtraCost").text("৳ " + totalExtra.toFixed(2));
 
-       
+
         let grandTotal = materialGrandTotal + totalExtra;
         $("#grandTotal").text("৳ " + grandTotal.toFixed(2));
       }
 
-   
+
       $(document).on("input", "#productQty", calculateTotals);
       calculateTotals();
 
       $("#saveBtn").on("click", function() {
-     
+
         let product_name = $("#product_name").val();
         let product_code = $("input[name='product_code']").val();
 
 
-      
+
         let product_id = parseInt($("#product_id").val());
         if (isNaN(product_id)) {
           alert("");
           return;
         }
 
-   
+
         if (!product_id) {
           alert("");
           return;
         }
 
-   
+
         let components = [];
         $("#bomTable tbody tr").each(function() {
           let productName = $(this).find("td:eq(1)").text().trim();
@@ -300,15 +300,17 @@
           let unitCost = parseFloat($(this).find("td:eq(4)").text().replace(/,/g, "")) || 0;
           let total = parseFloat($(this).find("td:eq(5)").text().replace(/,/g, "")) || 0;
 
-
           components.push({
             id: $(this).data("product-id"),
-            produced_qty: parseFloat($(this).find("td:eq(2)").text().replace(/,/g, "")) || 0,
+            // produced_qty: parseFloat($(this).find("td:eq(2)").text().replace(/,/g, "")) || 0,
             qty: parseFloat($(this).find("td:eq(2)").text().replace(/,/g, "")) || 0,
-            operator_name: "", 
-            remarks: "", 
+            unit_cost: parseFloat($(this).find("td:eq(4)").text().replace(/,/g, "")) || 0,
+            total: parseFloat($(this).find("td:eq(5)").text().replace(/,/g, "")) || 0,
+            operator_name: "",
+            remarks: "",
             warehouse_id: 1
           });
+
 
           console.log("Components:", components);
         });
@@ -318,14 +320,15 @@
         let packaging = parseBdtAmount($("#packagingCost").text());
         let transport = parseBdtAmount($("#transportCost").text());
 
-       
+
         let total_cost = labor + overhead + packaging + transport + components.reduce((a, b) => a + b.total, 0);
+
         let produced_qty = parseFloat($("#productQty").val()) || 1;
 
         if (isNaN(produced_qty)) {
           produced_qty = 1;
         }
-       
+
         let data = {
           product_name,
           product_id: parseInt($("#product_id").val()),
@@ -338,7 +341,7 @@
         console.log(data);
         // console.log("product_id value before sending:", $("#product_id").val());
 
-        
+
         $.ajax({
           url: "<?= $base_url ?>/api/production/save",
           type: "POST",

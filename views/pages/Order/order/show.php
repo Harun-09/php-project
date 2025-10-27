@@ -282,9 +282,9 @@
 
               <div class="meta-item"><strong>Shipping Method</strong>
                 <div id="shipping_method"><?php
-                                            $shipping_method = ShippingMethod::find($order->shipping_method_id);
-                                            echo $shipping_method ? $shipping_method->name : "N/A";
-                                            ?> </div>
+                                          $shipping_method = ShippingMethod::find($order->shipping_method_id);
+                                          echo $shipping_method ? $shipping_method->name : "N/A";
+                                          ?> </div>
               </div>
               <div class="meta-item"><strong>Ship To</strong>
                 <div class="small-muted billToAddr"><?php echo Customer::find($order->customer_id)->address ?> </div>
@@ -406,6 +406,7 @@
             <div class="label">Total</div>
             <div class="amount"><?php echo number_format($grand_total, 2); ?></div>
           </div>
+
 
           <div class="footer-actions">
             <a class="btn-print" href="javascript:window.print()">Print / Save PDF</a>

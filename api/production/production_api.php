@@ -68,7 +68,6 @@ class ProductionApi
 			}
 		}
 
-		// === 2️⃣ FINISHED PRODUCT STOCK INCREASE ===
 		$finishedProduct = Product::find($data["product_id"]);
 		if ($finishedProduct) {
 			$finishedProductObj = new Product();

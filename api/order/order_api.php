@@ -33,8 +33,11 @@ class OrderApi
 			$orderdetail->qty = $data["qty"];
 			$orderdetail->warehouse_id = $data["warehouse_id"] ?? 1;
 			$orderdetail->price = $data["price"];
-			$orderdetail->vat = $data["tax"] ?? 0;
-			$orderdetail->discount = $data["discount"] ?? 0;
+			$subtotal = $data["price"] * $data["qty"];
+			$vatAmount = $subtotal * ($data["tax"] / 100);
+			$discountAmount = $subtotal * ($data["discount"] / 100);
+			$orderdetail->vat = $vatAmount;
+			$orderdetail->discount = $discountAmount;
 			$orderdetail->created_at = date("Y-m-d H:i:s");
 			$orderdetail->updated_at = date("Y-m-d H:i:s");
 			$orderdetail->save();

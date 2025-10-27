@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Oct 26, 2025 at 10:20 PM
+-- Generation Time: Oct 27, 2025 at 07:06 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -44,9 +44,7 @@ CREATE TABLE `core_boms` (
 --
 
 INSERT INTO `core_boms` (`id`, `bom_code`, `product_id`, `product_name`, `revision_no`, `effective_date`, `status_id`, `created_at`, `updated_at`) VALUES
-(1, 'BOM-#00001', 1, 'iPhone 15 Pro', 'A', '2025-10-20', 1, '2025-10-19 22:10:22', '2025-10-19 22:10:22'),
-(2, 'BOM-#00002', 3, 'Men T-Shirt', 'A', '2025-10-20', 1, '2025-10-20 00:18:22', '2025-10-20 00:18:22'),
-(3, 'BOM-#00003', 1, 'Lithium Battery', 'A', '2025-10-25', 1, '2025-10-24 21:27:07', '2025-10-24 21:27:07');
+(1, 'BOM-#00001', 1, 'Power Bank 10000mAh', 'A', '2025-10-28', 1, '2025-10-27 18:51:14', '2025-10-27 18:51:14');
 
 -- --------------------------------------------------------
 
@@ -58,7 +56,7 @@ CREATE TABLE `core_bom_details` (
   `id` int NOT NULL,
   `bom_id` int NOT NULL,
   `raw_material_id` int NOT NULL,
-  `quantity` decimal(10,2) NOT NULL,
+  `quantity` int NOT NULL,
   `uom` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `remarks` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -70,12 +68,9 @@ CREATE TABLE `core_bom_details` (
 --
 
 INSERT INTO `core_bom_details` (`id`, `bom_id`, `raw_material_id`, `quantity`, `uom`, `remarks`, `created_at`, `updated_at`) VALUES
-(1, 1, 16, 1.00, 'Piece', '', '2025-10-19 22:10:22', '2025-10-19 22:10:22'),
-(2, 1, 10, 1.00, 'Piece', '', '2025-10-19 22:10:22', '2025-10-19 22:10:22'),
-(3, 1, 6, 1.00, 'Piece', '', '2025-10-19 22:10:22', '2025-10-19 22:10:22'),
-(4, 2, 16, 1.00, 'Piece', '', '2025-10-20 00:18:22', '2025-10-20 00:18:22'),
-(5, 2, 10, 1.00, 'Piece', '', '2025-10-20 00:18:22', '2025-10-20 00:18:22'),
-(6, 3, 1, 1.00, 'Kilogram', '', '2025-10-24 21:27:07', '2025-10-24 21:27:07');
+(1, 1, 2, 1, 'Kilogram', '', '2025-10-27 18:51:14', '2025-10-27 18:51:14'),
+(2, 1, 3, 1, 'Kilogram', '', '2025-10-27 18:51:14', '2025-10-27 18:51:14'),
+(3, 1, 4, 1, 'Kilogram', '', '2025-10-27 18:51:14', '2025-10-27 18:51:14');
 
 -- --------------------------------------------------------
 
@@ -163,10 +158,10 @@ INSERT INTO `core_customers` (`id`, `name`, `phone`, `email`, `address`, `create
 CREATE TABLE `core_expenses` (
   `id` int NOT NULL,
   `expense_date` timestamp NULL DEFAULT NULL,
-  `expense_category` varchar(50) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
+  `expense_category` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `description` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `amount` decimal(12,2) DEFAULT NULL,
-  `currency` varchar(10) DEFAULT 'BDT',
+  `currency` varchar(10) COLLATE utf8mb4_general_ci DEFAULT 'BDT',
   `paid_by` int DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -192,16 +187,16 @@ CREATE TABLE `core_orders` (
   `customer_id` int NOT NULL,
   `order_date` datetime NOT NULL,
   `delivery_date` datetime NOT NULL,
-  `shipping_address` text,
+  `shipping_address` text COLLATE utf8mb4_general_ci,
   `shipping_method_id` int DEFAULT NULL,
   `order_total` double NOT NULL DEFAULT '0',
   `paid_amount` double NOT NULL DEFAULT '0',
   `status_id` int DEFAULT '1',
   `discount` float DEFAULT '0',
-  `vat` varchar(250) NOT NULL,
+  `vat` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `warehouse_name` varchar(255) DEFAULT NULL
+  `warehouse_name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -209,16 +204,7 @@ CREATE TABLE `core_orders` (
 --
 
 INSERT INTO `core_orders` (`id`, `customer_id`, `order_date`, `delivery_date`, `shipping_address`, `shipping_method_id`, `order_total`, `paid_amount`, `status_id`, `discount`, `vat`, `created_at`, `updated_at`, `warehouse_name`) VALUES
-(1, 4, '2025-10-25 01:48:14', '2025-10-25 01:48:14', 'Rajshahi, Bangladesh', 1, 171700, 171700, 1, 3400, '', '2025-10-24 19:48:14', '2025-10-24 19:48:14', 'Central Warehouse'),
-(2, 5, '2025-10-25 01:52:34', '2025-10-25 01:52:34', 'Sylhet, Bangladesh', 1, 1360000, 1360000, 1, 27200, '', '2025-10-24 19:52:34', '2025-10-24 19:52:34', 'Khulna Warehouse'),
-(3, 3, '2025-10-25 02:32:50', '2025-10-25 02:32:50', 'Khulna, Bangladesh', 1, 86700, 86700, 1, 850, '', '2025-10-24 20:32:50', '2025-10-24 20:32:50', 'Khulna Warehouse'),
-(4, 5, '2025-10-25 02:34:06', '2025-10-25 02:34:06', 'Sylhet, Bangladesh', 1, 750, 750, 1, 0, '', '2025-10-24 20:34:06', '2025-10-24 20:34:06', 'Central Warehouse'),
-(5, 2, '2025-10-25 02:38:38', '2025-10-25 02:38:38', 'Chittagong, Bangladesh', 1, 106050, 106050, 1, 1050, '', '2025-10-24 20:38:38', '2025-10-24 20:38:38', 'Central Warehouse'),
-(6, 2, '2025-10-25 02:47:16', '2025-10-25 02:47:16', 'Chittagong, Bangladesh', 1, 2200, 2200, 1, 0, '', '2025-10-24 20:47:16', '2025-10-24 20:47:16', 'Chattogram Warehouse'),
-(7, 4, '2025-10-25 02:49:21', '2025-10-25 02:49:21', 'Rajshahi, Bangladesh', 1, 85000, 85000, 1, 0, '', '2025-10-24 20:49:21', '2025-10-24 20:49:21', 'Central Warehouse'),
-(8, 5, '2025-10-25 02:51:45', '2025-10-25 02:51:45', 'Sylhet, Bangladesh', 1, 510000, 510000, 1, 0, '', '2025-10-24 20:51:45', '2025-10-24 20:51:45', 'Central Warehouse'),
-(9, 4, '2025-10-25 02:53:50', '2025-10-25 02:53:50', 'Rajshahi, Bangladesh', 1, 850000, 850000, 1, 0, '', '2025-10-24 20:53:51', '2025-10-24 20:53:51', 'Central Warehouse'),
-(10, 3, '2025-10-25 02:55:57', '2025-10-25 02:55:57', 'Khulna, Bangladesh', 1, 85000, 85000, 1, 0, '', '2025-10-24 20:55:57', '2025-10-24 20:55:57', 'Central Warehouse');
+(1, 1, '2025-10-28 01:01:04', '2025-10-28 01:01:04', 'shipaddress', 1, 1200, 1200, 1, 0, '0', '2025-10-27 19:01:04', '2025-10-27 19:01:04', 'Central Warehouse');
 
 -- --------------------------------------------------------
 
@@ -236,7 +222,7 @@ CREATE TABLE `core_order_details` (
   `discount` float NOT NULL DEFAULT '0',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `warehouse_id` varchar(255) DEFAULT NULL
+  `warehouse_id` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -244,16 +230,7 @@ CREATE TABLE `core_order_details` (
 --
 
 INSERT INTO `core_order_details` (`id`, `order_id`, `product_id`, `qty`, `price`, `vat`, `discount`, `created_at`, `updated_at`, `warehouse_id`) VALUES
-(1, 1, 5, 2, 85000, 3, 2, '2025-10-24 19:48:14', '2025-10-24 19:48:14', '1'),
-(2, 2, 5, 16, 85000, 2, 2, '2025-10-24 19:52:34', '2025-10-24 19:52:34', '3'),
-(3, 3, 5, 1, 85000, 3, 1, '2025-10-24 20:32:50', '2025-10-24 20:32:50', '3'),
-(4, 4, 7, 1, 750, 0, 0, '2025-10-24 20:34:06', '2025-10-24 20:34:06', '1'),
-(5, 5, 4, 3, 35000, 2, 1, '2025-10-24 20:38:38', '2025-10-24 20:38:38', '1'),
-(6, 6, 8, 1, 2200, 0, 0, '2025-10-24 20:47:16', '2025-10-24 20:47:16', '2'),
-(7, 7, 5, 1, 85000, 0, 0, '2025-10-24 20:49:21', '2025-10-24 20:49:21', '1'),
-(8, 8, 5, 6, 85000, 0, 0, '2025-10-24 20:51:45', '2025-10-24 20:51:45', '1'),
-(9, 9, 5, 10, 85000, 0, 0, '2025-10-24 20:53:51', '2025-10-24 20:53:51', '1'),
-(10, 10, 5, 1, 85000, 0, 0, '2025-10-24 20:55:57', '2025-10-24 20:55:57', '1');
+(1, 1, 1, 1, 1200, 0, 0, '2025-10-27 19:01:04', '2025-10-27 19:01:04', '1');
 
 -- --------------------------------------------------------
 
@@ -264,7 +241,7 @@ INSERT INTO `core_order_details` (`id`, `order_id`, `product_id`, `qty`, `price`
 CREATE TABLE `core_productions` (
   `id` int NOT NULL,
   `product_id` int NOT NULL,
-  `produced_qty` decimal(10,2) NOT NULL,
+  `produced_qty` decimal(10,0) NOT NULL,
   `start_date` date DEFAULT NULL,
   `end_date` date DEFAULT NULL,
   `created_by` int DEFAULT NULL,
@@ -277,8 +254,8 @@ CREATE TABLE `core_productions` (
 --
 
 INSERT INTO `core_productions` (`id`, `product_id`, `produced_qty`, `start_date`, `end_date`, `created_by`, `created_at`, `updated_at`) VALUES
-(1, 1, 0.00, '2025-10-27', '2025-10-27', 1, '2025-10-26 22:06:00', '2025-10-26 22:06:00'),
-(2, 1, 0.00, '2025-10-27', '2025-10-27', 1, '2025-10-26 22:15:03', '2025-10-26 22:15:03');
+(1, 1, 11, '2025-10-28', '2025-10-28', 1, '2025-10-27 18:51:37', '2025-10-27 18:51:37'),
+(2, 1, 39, '2025-10-28', '2025-10-28', 1, '2025-10-27 18:53:11', '2025-10-27 18:53:11');
 
 -- --------------------------------------------------------
 
@@ -289,12 +266,24 @@ INSERT INTO `core_productions` (`id`, `product_id`, `produced_qty`, `start_date`
 CREATE TABLE `core_production_details` (
   `id` int NOT NULL,
   `production_id` int NOT NULL,
-  `produced_qty` decimal(10,2) NOT NULL,
-  `operator_name` varchar(100) DEFAULT NULL,
-  `remarks` text,
+  `produced_qty` decimal(10,0) NOT NULL,
+  `operator_name` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `remarks` text COLLATE utf8mb4_general_ci,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `core_production_details`
+--
+
+INSERT INTO `core_production_details` (`id`, `production_id`, `produced_qty`, `operator_name`, `remarks`, `created_at`, `updated_at`) VALUES
+(1, 1, 11, '', '', '2025-10-27 18:51:37', '2025-10-27 18:51:37'),
+(2, 1, 11, '', '', '2025-10-27 18:51:37', '2025-10-27 18:51:37'),
+(3, 1, 11, '', '', '2025-10-27 18:51:37', '2025-10-27 18:51:37'),
+(4, 2, 39, '', '', '2025-10-27 18:53:11', '2025-10-27 18:53:11'),
+(5, 2, 39, '', '', '2025-10-27 18:53:11', '2025-10-27 18:53:11'),
+(6, 2, 39, '', '', '2025-10-27 18:53:11', '2025-10-27 18:53:11');
 
 -- --------------------------------------------------------
 
@@ -304,16 +293,16 @@ CREATE TABLE `core_production_details` (
 
 CREATE TABLE `core_products` (
   `id` int NOT NULL,
-  `name` varchar(100) NOT NULL,
+  `name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `category_id` int NOT NULL,
   `uom_id` int DEFAULT NULL,
-  `description` text,
+  `description` text COLLATE utf8mb4_general_ci,
   `is_raw` tinyint(1) NOT NULL DEFAULT '1',
-  `brand` varchar(100) DEFAULT NULL,
+  `brand` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `price` decimal(10,2) NOT NULL,
-  `sku` varchar(50) DEFAULT NULL,
+  `sku` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `tax` decimal(10,2) DEFAULT '0.00',
-  `image` varchar(255) DEFAULT NULL,
+  `image` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `stock_qty` int DEFAULT '0',
   `purchase_price` decimal(10,2) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -325,26 +314,11 @@ CREATE TABLE `core_products` (
 --
 
 INSERT INTO `core_products` (`id`, `name`, `category_id`, `uom_id`, `description`, `is_raw`, `brand`, `price`, `sku`, `tax`, `image`, `stock_qty`, `purchase_price`, `created_at`, `updated_at`) VALUES
-(1, 'Lithium Battery', 1, 4, 'Rechargeable lithium battery', 1, 'TechParts', 500.00, 'ELEC-R01', 0.00, '', 502, 400.00, '2025-10-24 19:16:08', '2025-10-24 19:16:08'),
-(2, 'Smartphone Screen', 1, 4, '6.5 inch AMOLED display', 1, 'TechParts', 2000.00, 'ELEC-R02', 0.00, '', 301, 1800.00, '2025-10-24 19:16:08', '2025-10-24 20:22:35'),
-(3, 'Plastic Casing', 1, 4, 'Smartphone casing', 1, 'TechParts', 300.00, 'ELEC-R03', 0.00, NULL, 400, 250.00, '2025-10-24 19:16:08', '2025-10-24 19:16:08'),
-(4, 'Smartphone X100', 1, 4, 'Assembled smartphone using battery, screen & casing', 0, 'TechBrand', 35000.00, 'ELEC-001', 0.00, '', 47, 30000.00, '2025-10-24 19:16:08', '2025-10-24 20:38:38'),
-(5, 'Laptop Pro 15', 1, 4, 'High-performance laptop', 0, 'TechBrand', 85000.00, 'ELEC-002', 0.00, '', 11, 75000.00, '2025-10-24 19:16:08', '2025-10-24 20:55:57'),
-(6, 'Cotton Fabric', 2, 8, 'Raw cotton fabric', 1, 'FabricCo', 200.00, 'CLO-R01', 0.00, NULL, 1000, 150.00, '2025-10-24 19:16:08', '2025-10-24 19:16:08'),
-(7, 'Men T-Shirt', 2, 4, 'Cotton t-shirt, size M', 0, 'FashionCo', 750.00, 'CLO-001', 0.00, '', 99, 500.00, '2025-10-24 19:16:08', '2025-10-24 20:34:06'),
-(8, 'Women Dress', 2, 4, 'Elegant evening dress', 0, 'FashionCo', 2200.00, 'CLO-002', 0.00, NULL, 50, 1800.00, '2025-10-24 19:16:08', '2025-10-24 19:16:08'),
-(9, 'Leather', 3, 5, 'Raw leather', 1, 'LeatherCo', 1200.00, 'FOOT-R01', 0.00, NULL, 100, 1000.00, '2025-10-24 19:16:08', '2025-10-24 19:16:08'),
-(10, 'Running Shoes', 3, 10, 'Sneakers made from leather', 0, 'Sporty', 3200.00, 'FOOT-001', 0.00, NULL, 40, 2500.00, '2025-10-24 19:16:08', '2025-10-24 19:16:08'),
-(11, 'Sandals', 3, 10, 'Leather sandals', 0, 'FootWearCo', 1800.00, 'FOOT-002', 0.00, NULL, 60, 1400.00, '2025-10-24 19:16:08', '2025-10-24 19:16:08'),
-(12, 'Wheat Flour', 4, 5, 'Premium wheat flour', 1, 'AgroFood', 50.00, 'GROC-R01', 0.00, NULL, 500, 40.00, '2025-10-24 19:16:08', '2025-10-24 19:16:08'),
-(13, 'Rice 5kg', 4, 2, 'Basmati rice', 1, 'AgroFood', 650.00, 'GROC-R02', 0.00, NULL, 200, 500.00, '2025-10-24 19:16:08', '2025-10-24 19:16:08'),
-(14, 'Cooking Oil 1L', 4, 6, 'Sunflower oil', 1, 'AgroFood', 350.00, 'GROC-R03', 0.00, NULL, 150, 300.00, '2025-10-24 19:16:08', '2025-10-24 19:16:08'),
-(15, 'Chocolate Cake', 4, 4, 'Ready-to-eat cake made from flour & oil', 0, 'SweetCo', 350.00, 'GROC-001', 0.00, NULL, 50, 250.00, '2025-10-24 19:16:08', '2025-10-24 19:16:08'),
-(16, 'Fried Rice Pack', 4, 4, 'Rice snack pack with oil & spices', 0, 'AgroFood', 180.00, 'GROC-002', 0.00, NULL, 100, 120.00, '2025-10-24 19:16:08', '2025-10-24 19:16:08'),
-(17, 'Lipstick Red', 5, 4, 'Long-lasting red lipstick', 0, 'BeautyCo', 500.00, 'COS-001', 0.00, NULL, 80, 400.00, '2025-10-24 19:16:08', '2025-10-24 19:16:08'),
-(18, 'Face Cream', 5, 6, 'Moisturizing cream 50ml', 0, 'BeautyCo', 1200.00, 'COS-002', 0.00, NULL, 70, 1000.00, '2025-10-24 19:16:08', '2025-10-24 19:16:08'),
-(19, 'Notebook A5', 8, 4, '100-page notebook', 0, 'StationeryCo', 60.00, 'STN-001', 0.00, NULL, 300, 40.00, '2025-10-24 19:16:08', '2025-10-24 19:16:08'),
-(20, 'Ball Pen', 8, 4, 'Blue ink ball pen', 0, 'StationeryCo', 20.00, 'STN-002', 0.00, NULL, 500, 10.00, '2025-10-24 19:16:08', '2025-10-24 19:16:08');
+(1, 'Power Bank 10000mAh', 1, 1, 'Portable power bank 10000mAh', 0, 'Xiaomi', 1200.00, 'PB-10000', 5.00, 'powerbank.jpg', 99, 900.00, '2025-10-27 18:45:45', '2025-10-27 19:01:04'),
+(2, 'Li-ion Battery 18650', 2, 1, 'Rechargeable 18650 battery', 1, 'Panasonic', 200.00, 'BAT-18650', 0.00, 'battery.jpg', 451, 180.00, '2025-10-27 18:45:45', '2025-10-27 18:57:01'),
+(3, 'USB C Cable', 2, 1, 'USB C to C charging cable', 1, 'Generic', 100.00, 'USB-C-1M', 0.00, 'cable.jpg', 251, 80.00, '2025-10-27 18:45:45', '2025-10-27 18:57:01'),
+(4, 'Plastic Casing', 2, 1, 'Plastic shell for power bank', 1, 'Generic', 50.00, 'CASE-PB', 0.00, 'casing.jpg', 151, 40.00, '2025-10-27 18:45:45', '2025-10-27 18:57:01'),
+(5, 'Portable Bluetooth Speaker', 4, 1, 'Compact wireless Bluetooth speaker with built-in rechargeable battery, FM, and USB/SD support.', 0, 'Remax', 1450.00, 'BTS-RMX-01', 0.00, NULL, 120, 1100.00, '2025-10-27 19:00:49', '2025-10-27 19:00:49');
 
 -- --------------------------------------------------------
 
@@ -356,11 +330,11 @@ CREATE TABLE `core_purchases` (
   `id` int NOT NULL,
   `supplier_id` int NOT NULL,
   `purchase_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `invoice_no` varchar(100) DEFAULT NULL,
-  `warehouse_name` varchar(250) NOT NULL,
+  `invoice_no` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `warehouse_name` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
   `purchase_total` decimal(10,2) NOT NULL,
   `paid_amount` decimal(10,2) NOT NULL DEFAULT '0.00',
-  `remarks` varchar(255) DEFAULT NULL,
+  `remarks` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -370,11 +344,7 @@ CREATE TABLE `core_purchases` (
 --
 
 INSERT INTO `core_purchases` (`id`, `supplier_id`, `purchase_date`, `invoice_no`, `warehouse_name`, `purchase_total`, `paid_amount`, `remarks`, `created_at`, `updated_at`) VALUES
-(1, 2, '2025-10-25 00:00:00', '#0001', 'Khulna Warehouse', 1800.00, 1800.00, 'dv', '2025-10-24 20:08:19', '2025-10-24 20:08:19'),
-(2, 4, '2025-10-25 00:00:00', '#0002', 'Chattogram Warehouse', 1800.00, 1800.00, '', '2025-10-24 20:13:03', '2025-10-24 20:13:03'),
-(3, 3, '2025-10-25 00:00:00', '#0003', 'Chattogram Warehouse', 1800.00, 1800.00, '', '2025-10-24 20:15:55', '2025-10-24 20:15:55'),
-(4, 3, '2025-10-25 00:00:00', '#0004', 'Central Warehouse', 1800.00, 1800.00, '', '2025-10-24 20:18:48', '2025-10-24 20:18:48'),
-(5, 3, '2025-10-25 00:00:00', '#0005', 'Chattogram Warehouse', 1800.00, 1800.00, '', '2025-10-24 20:22:35', '2025-10-24 20:22:35');
+(1, 1, '2025-10-28 00:00:00', '#0001', 'Central Warehouse', 300.00, 300.00, '', '2025-10-27 18:57:01', '2025-10-27 18:57:01');
 
 -- --------------------------------------------------------
 
@@ -399,8 +369,9 @@ CREATE TABLE `core_purchase_details` (
 --
 
 INSERT INTO `core_purchase_details` (`id`, `purchase_id`, `product_id`, `warehouse_id`, `qty`, `price`, `created_at`, `updated_at`) VALUES
-(1, 4, 2, 1, 1, 1800.00, '2025-10-24 20:18:48', '2025-10-24 20:18:48'),
-(2, 5, 2, 2, 1, 1800.00, '2025-10-24 20:22:35', '2025-10-24 20:22:35');
+(1, 1, 2, 1, 1, 180.00, '2025-10-27 18:57:01', '2025-10-27 18:57:01'),
+(2, 1, 3, 1, 1, 80.00, '2025-10-27 18:57:01', '2025-10-27 18:57:01'),
+(3, 1, 4, 1, 1, 40.00, '2025-10-27 18:57:01', '2025-10-27 18:57:01');
 
 -- --------------------------------------------------------
 
@@ -410,7 +381,7 @@ INSERT INTO `core_purchase_details` (`id`, `purchase_id`, `product_id`, `warehou
 
 CREATE TABLE `core_roles` (
   `id` int NOT NULL,
-  `name` varchar(50) NOT NULL
+  `name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -435,8 +406,8 @@ INSERT INTO `core_roles` (`id`, `name`) VALUES
 
 CREATE TABLE `core_shipping_methods` (
   `id` int NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `description` varchar(255) DEFAULT NULL
+  `name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -459,8 +430,8 @@ INSERT INTO `core_shipping_methods` (`id`, `name`, `description`) VALUES
 
 CREATE TABLE `core_status` (
   `id` int NOT NULL,
-  `name` varchar(50) NOT NULL
-)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `core_status`
@@ -485,7 +456,7 @@ CREATE TABLE `core_stocks` (
   `product_id` int UNSIGNED NOT NULL,
   `qty` float DEFAULT NULL,
   `transaction_type_id` int UNSIGNED DEFAULT NULL,
-  `remark` text,
+  `remark` text COLLATE utf8mb4_general_ci,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `warehouse_id` int UNSIGNED DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -497,20 +468,9 @@ CREATE TABLE `core_stocks` (
 --
 
 INSERT INTO `core_stocks` (`id`, `product_id`, `qty`, `transaction_type_id`, `remark`, `created_at`, `warehouse_id`, `updated_at`, `lot_id`) VALUES
-(1, 5, 2, 2, '', '2025-10-24 19:48:14', 1, '2025-10-24 19:48:14', 12345),
-(2, 5, 16, 2, '', '2025-10-24 19:52:34', 3, '2025-10-24 19:52:34', 12345),
-(3, 2, 1, 1, '', '2025-10-24 20:18:48', 1, '2025-10-24 20:18:48', 12345),
-(4, 2, 1, 1, '', '2025-10-24 20:22:35', 2, '2025-10-24 20:22:35', 12345),
-(5, 5, 1, 2, 'Order #3', '2025-10-24 20:32:50', 3, '2025-10-24 20:32:50', 12345),
-(6, 7, 1, 2, 'Order #4', '2025-10-24 20:34:06', 1, '2025-10-24 20:34:06', 12345),
-(7, 4, -3, 2, 'Order #5', '2025-10-24 20:38:38', 1, '2025-10-24 20:38:38', 12345),
-(8, 8, 1, 2, 'Order #6', '2025-10-24 20:47:16', 2, '2025-10-24 20:47:16', 12345),
-(9, 5, 1, 2, 'Order #7', '2025-10-24 20:49:21', 1, '2025-10-24 20:49:21', 12345),
-(10, 5, 6, 2, 'Order #8', '2025-10-24 20:51:45', 1, '2025-10-24 20:51:45', 12345),
-(11, 5, -10, 2, 'Order #9', '2025-10-24 20:53:51', 1, '2025-10-24 20:53:51', 12345),
-(12, 5, -1, 2, 'Order #10', '2025-10-24 20:55:57', 1, '2025-10-24 20:55:57', 12345),
-(13, 1, 1, 1, 'Produced via production #1', '2025-10-26 22:06:00', 1, '2025-10-26 22:06:00', 12345),
-(14, 1, 1, 1, 'Produced via production #2', '2025-10-26 22:15:03', 1, '2025-10-26 22:15:03', 12345);
+(1, 1, 11, 1, 'Production Output', '2025-10-27 18:51:37', 1, '2025-10-27 18:51:37', 12345),
+(2, 1, 39, 1, 'Production Output', '2025-10-27 18:53:11', 1, '2025-10-27 18:53:11', 12345),
+(3, 1, -1, 2, 'Order #1', '2025-10-27 19:01:04', 1, '2025-10-27 19:01:04', 12345);
 
 -- --------------------------------------------------------
 
@@ -520,11 +480,11 @@ INSERT INTO `core_stocks` (`id`, `product_id`, `qty`, `transaction_type_id`, `re
 
 CREATE TABLE `core_suppliers` (
   `id` int NOT NULL,
-  `name` varchar(100) DEFAULT NULL,
-  `contact_person` varchar(100) DEFAULT NULL,
-  `phone` varchar(50) DEFAULT NULL,
-  `email` varchar(100) DEFAULT NULL,
-  `address` varchar(255) DEFAULT NULL,
+  `name` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `contact_person` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `phone` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `email` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `address` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `status` tinyint(1) DEFAULT '1',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -551,8 +511,8 @@ INSERT INTO `core_suppliers` (`id`, `name`, `contact_person`, `phone`, `email`, 
 
 CREATE TABLE `core_transactions` (
   `id` int NOT NULL,
-  `transaction_type` varchar(50) DEFAULT NULL,
-  `reference_no` varchar(100) DEFAULT NULL,
+  `transaction_type` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `reference_no` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `date` date DEFAULT NULL,
   `warehouse_id` int DEFAULT NULL,
   `product_id` int DEFAULT NULL,
@@ -569,8 +529,8 @@ CREATE TABLE `core_transactions` (
 
 CREATE TABLE `core_transaction_types` (
   `id` int NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `description` varchar(255) DEFAULT NULL
+  `name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -589,9 +549,9 @@ INSERT INTO `core_transaction_types` (`id`, `name`, `description`) VALUES
 
 CREATE TABLE `core_uom` (
   `id` int NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `code` varchar(10) NOT NULL,
-  `description` varchar(100) DEFAULT NULL,
+  `name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `code` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
+  `description` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `status` tinyint(1) DEFAULT '1',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -620,15 +580,15 @@ INSERT INTO `core_uom` (`id`, `name`, `code`, `description`, `status`, `created_
 
 CREATE TABLE `core_users` (
   `id` int NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `full_name` varchar(100) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `email` varchar(100) DEFAULT NULL,
-  `mobile` varchar(20) DEFAULT NULL,
-  `photo` varchar(255) DEFAULT NULL,
+  `name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `full_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `mobile` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `photo` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `role_id` int NOT NULL,
   `inactive` tinyint(1) DEFAULT '0'
-)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `core_users`
@@ -646,12 +606,12 @@ INSERT INTO `core_users` (`id`, `name`, `full_name`, `password`, `email`, `mobil
 
 CREATE TABLE `core_warehouses` (
   `id` int NOT NULL,
-  `name` varchar(100) DEFAULT NULL,
-  `location` varchar(255) DEFAULT NULL,
+  `name` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `location` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `status` tinyint(1) DEFAULT '1',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `core_warehouses`
@@ -807,7 +767,7 @@ CREATE TABLE `pma__recent` (
 --
 
 INSERT INTO `pma__recent` (`username`, `tables`) VALUES
-('root', '[{\"db\":\"wdpf66_harun\",\"table\":\"core_production_details\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_productions\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_products\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_stocks\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_status\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_boms\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_bom_details\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_production_log\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_production_orders\"}]');
+('root', '[{\"db\":\"wdpf66_harun\",\"table\":\"core_products\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_stocks\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_transaction_types\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_boms\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_bom_details\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_production_details\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_productions\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_orders\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_expenses\"},{\"db\":\"wdpf66_harun\",\"table\":\"core_customers\"}]');
 
 -- --------------------------------------------------------
 
@@ -914,7 +874,7 @@ CREATE TABLE `pma__userconfig` (
 --
 
 INSERT INTO `pma__userconfig` (`username`, `timevalue`, `config_data`) VALUES
-('root', '2025-10-26 22:20:52', '{\"Console\\/Mode\":\"collapse\"}');
+('root', '2025-10-27 19:06:41', '{\"Console\\/Mode\":\"collapse\"}');
 
 -- --------------------------------------------------------
 
@@ -1203,13 +1163,13 @@ ALTER TABLE `pma__users`
 -- AUTO_INCREMENT for table `core_boms`
 --
 ALTER TABLE `core_boms`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `core_bom_details`
 --
 ALTER TABLE `core_bom_details`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `core_categories`
@@ -1233,13 +1193,13 @@ ALTER TABLE `core_expenses`
 -- AUTO_INCREMENT for table `core_orders`
 --
 ALTER TABLE `core_orders`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `core_order_details`
 --
 ALTER TABLE `core_order_details`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `core_productions`
@@ -1251,25 +1211,25 @@ ALTER TABLE `core_productions`
 -- AUTO_INCREMENT for table `core_production_details`
 --
 ALTER TABLE `core_production_details`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `core_products`
 --
 ALTER TABLE `core_products`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `core_purchases`
 --
 ALTER TABLE `core_purchases`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `core_purchase_details`
 --
 ALTER TABLE `core_purchase_details`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `core_roles`
@@ -1293,7 +1253,7 @@ ALTER TABLE `core_status`
 -- AUTO_INCREMENT for table `core_stocks`
 --
 ALTER TABLE `core_stocks`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `core_suppliers`

@@ -87,11 +87,11 @@
                   <div class="text">Category Management</div>
                 </a>
               </li>
-              <li class="sub-menu-item">
+              <!-- <li class="sub-menu-item">
                 <a href="<?= $base_url ?>/orderstatus/index">
                   <div class="text">Order Status Management</div>
                 </a>
-              </li>
+              </li> -->
             </ul>
           </li>
           <ul class="menu-list">
@@ -102,13 +102,18 @@
               </a>
               <ul class="sub-menu">
                 <li class="sub-menu-item">
-                  <a href="<?= $base_url ?>/productionorder/index">
-                    <div class="text">Production Orders</div>
+                  <a href="<?= $base_url ?>/production/index">
+                    <div class="text">Production</div>
                   </a>
                 </li>
                 <li class="sub-menu-item">
-                  <a href="<?= $base_url ?>/productionlog/index">
-                    <div class="text">Production Logs</div>
+                  <a href="<?= $base_url ?>/productiondetail/index">
+                    <div class="text">Production details</div>
+                  </a>
+                </li>
+                <li class="sub-menu-item">
+                  <a href="<?= $base_url ?>/product/index">
+                    <div class="text">Products</div>
                   </a>
                 </li>
               </ul>

@@ -140,6 +140,8 @@ video {
   font-weight: inherit;
 }
 
+
+
 article,
 aside,
 details,
@@ -173,6 +175,7 @@ body {
   background: #F2F7FB;
   line-height: 1;
   padding: 0 !important;
+  color:white !important;
 }
 
 article,

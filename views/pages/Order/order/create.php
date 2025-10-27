@@ -7,7 +7,6 @@
   <title>Create Order</title>
 
   <style>
-
     .summary {
 
       width: 100%;
@@ -47,7 +46,7 @@
     .order-form table td input.qty,
     .order-form table td input.tax,
     .order-form table td input.discount {
-      width: 60px;
+      width: 80px;
       max-width: 100%;
       padding: 4px 6px;
       box-sizing: border-box;
@@ -64,7 +63,7 @@
 
     .tax {
       position: relative;
-      padding-right: 20px;
+      /* padding-right: 20px; */
       text-align: right;
     }
 
@@ -250,7 +249,7 @@
       font-size: 1.05rem;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 1000px) {
       .order-form {
         padding: 20px;
       }
@@ -332,7 +331,7 @@
               <td class="price align-middle">0</td>
 
               <td>
-                <input type="number" min="0" step="1" class="form-control form-control-sm tax" value="1">
+                <input type="number" min="0" step="1" class="form-control-sm tax" value="1">
               </td>
 
 
@@ -445,7 +444,7 @@
           },
           success: function(res) {
             let data = JSON.parse(res);
-           // console.log(data.product.tax);
+            // console.log(data.product.tax);
 
             let price = data.product.price;
             // console.log("after json",data);
@@ -493,7 +492,7 @@
         let discountAmount = subtotal * (discount / 100);
         let line_total = (Math.round(subtotal + taxAmount - discountAmount));
 
-       
+
 
         let data = {
           id: product_id,
@@ -585,12 +584,12 @@
         let customer_id = $("#customer").val();
         let shipppingadd = $("#shipAddress").val();
         let order_total = $("#grandTotal").text();
-        let vat = $("#vat").val();
+        let vat = parseFloat($("#vat").text()) || 0;
+        let discount = parseFloat($("#discount").text()) || 0;
         let shipping_method_id = $("#shipping_method").val();
-        let discount = $("#discount").text();
         let order_date = new Date().toISOString();
         let delivery_date = new Date().toISOString();
-       let warehouse_name = $("#warehouse option:selected").text();
+        let warehouse_name = $("#warehouse option:selected").text();
         let products = cart.getData();
 
         let data = {
@@ -602,7 +601,7 @@
           discount,
           order_date,
           delivery_date,
-            warehouse_name,
+          warehouse_name,
           products
         };
 

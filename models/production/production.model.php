@@ -22,30 +22,11 @@ class Production extends Model implements JsonSerializable{
 		$this->updated_at=$updated_at;
 
 	}
-
-	public function save()
-	{
-		global $db, $tx;
-
-		$qty = $this->produced_qty;
-		if (empty($qty) || !is_numeric($qty)) {
-			$qty = 0;
-		}
-
-		
-		$start_date = $this->start_date ?: date("Y-m-d");
-		$end_date = $this->end_date ?: date("Y-m-d");
-
-		$created_at = $this->created_at ?: date("Y-m-d H:i:s");
-		$updated_at = $this->updated_at ?: date("Y-m-d H:i:s");
-
-		$sql = "INSERT INTO {$tx}productions ( product_id, produced_qty, start_date, end_date, created_by, created_at, updated_at)
-            VALUES ( '$this->product_id', '$qty',  '$start_date', '$end_date', '$this->created_by', '$created_at', '$updated_at')";
-		$db->query($sql);
+	public function save(){
+		global $db,$tx;
+		$db->query("insert into {$tx}productions(product_id,produced_qty,start_date,end_date,created_by,created_at,updated_at)values('$this->product_id','$this->produced_qty','$this->start_date','$this->end_date','$this->created_by','$this->created_at','$this->updated_at')");
 		return $db->insert_id;
 	}
-
-
 	public function update(){
 		global $db,$tx;
 		$db->query("update {$tx}productions set product_id='$this->product_id',produced_qty='$this->produced_qty',start_date='$this->start_date',end_date='$this->end_date',created_by='$this->created_by',created_at='$this->created_at',updated_at='$this->updated_at' where id='$this->id'");
@@ -98,7 +79,7 @@ class Production extends Model implements JsonSerializable{
 		return json_encode($this);
 	}
 	public function __toString(){
-		return "		Id:$this->id<br>  
+		return "		Id:$this->id<br> 
 		Product Id:$this->product_id<br> 
 		Produced Qty:$this->produced_qty<br> 
 		Start Date:$this->start_date<br> 
@@ -131,9 +112,9 @@ class Production extends Model implements JsonSerializable{
 		$html="<table class='table'>";
 			$html.="<tr><th colspan='3'>".Html::link(["class"=>"btn btn-success","route"=>"production/create","text"=>"New Production"])."</th></tr>";
 		if($action){
-			$html.="<tr><th>Id</th><th>Order Id</th><th>Product Id</th><th>Produced Qty</th><th>Start Date</th><th>End Date</th><th>Created By</th><th>Created At</th><th>Updated At</th><th>Action</th></tr>";
+			$html.="<tr><th>Id</th><th>Product Id</th><th>Produced Qty</th><th>Start Date</th><th>End Date</th><th>Created By</th><th>Created At</th><th>Updated At</th><th>Action</th></tr>";
 		}else{
-			$html.="<tr><th>Id</th><th>Order Id</th><th>Product Id</th><th>Produced Qty</th><th>Start Date</th><th>End Date</th><th>Created By</th><th>Created At</th><th>Updated At</th></tr>";
+			$html.="<tr><th>Id</th><th>Product Id</th><th>Produced Qty</th><th>Start Date</th><th>End Date</th><th>Created By</th><th>Created At</th><th>Updated At</th></tr>";
 		}
 		while($production=$result->fetch_object()){
 			$action_buttons = "";

@@ -12,19 +12,26 @@ $orders = Order::pagination($page, $perpage);
 
 <style>
 .table-bordered td, .table-bordered th {
-    border: 1px solid #dee2e6; /* main border */
+    border: 1px solid #dee2e6;
 }
 
 /* সব row-এ bottom border নিশ্চিত করা */
 .table-bordered tbody tr td {
     border-bottom: 1px solid #dee2e6 !important;
+    color: white; /* লেখার রঙ সাদা */
 }
 
 /* table-footer বা last row ঠিক করতে */
 .table-bordered tbody tr:last-child td {
     border-bottom: 1px solid #dee2e6 !important;
 }
+
+/* optional: hover করলে text white থাকবে */
+.table-bordered tbody tr:hover td {
+    color: white !important;
+}
 </style>
+
 
 
 <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
@@ -48,7 +55,8 @@ $orders = Order::pagination($page, $perpage);
         <th>Action</th>
       </tr>
     </thead>
-    <tbody>
+   <tbody>
+
       <?php if(!empty($orders)): ?>
         <?php foreach($orders as $order): ?>
           <tr>

@@ -17,6 +17,7 @@ $purchases = Purchase::pagination($page, $perpage);
 
 .table-bordered tbody tr td {
     border-bottom: 1px solid #dee2e6 !important;
+    
 }
 
 .table-bordered tbody tr:last-child td {

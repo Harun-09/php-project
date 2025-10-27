@@ -12,11 +12,8 @@ public function save($data,$file){
 	if(isset($data["create"])){
 	$errors=[];
 /*
-	if(!preg_match("/^[\s\S]+$/",$data["production_order_id"])){
-		$errors["production_order_id"]="Invalid production_order_id";
-	}
-	if(!preg_match("/^[\s\S]+$/",$_POST["txtShift"])){
-		$errors["shift"]="Invalid shift";
+	if(!preg_match("/^[\s\S]+$/",$data["production_id"])){
+		$errors["production_id"]="Invalid production_id";
 	}
 	if(!preg_match("/^[\s\S]+$/",$data["produced_qty"])){
 		$errors["produced_qty"]="Invalid produced_qty";
@@ -31,14 +28,12 @@ public function save($data,$file){
 */
 		if(count($errors)==0){
 			$productiondetail=new ProductionDetail();
-		$productiondetail->production_order_id=$data["production_order_id"];
-		$productiondetail->shift=$data["shift"];
+		$productiondetail->production_id=$data["production_id"];
 		$productiondetail->produced_qty=$data["produced_qty"];
 		$productiondetail->operator_name=$data["operator_name"];
-		$productiondetail->log_date=$now;
 		$productiondetail->remarks=$data["remarks"];
-		$productiondetail->created_at=$now;
-		$productiondetail->updated_at=$now;
+		$productiondetail->created_at=$data["created_at"];
+		$productiondetail->updated_at=$data["updated_at"];
 
 			$productiondetail->save();
 		redirect();
@@ -54,11 +49,8 @@ public function update($data,$file){
 	if(isset($data["update"])){
 	$errors=[];
 /*
-	if(!preg_match("/^[\s\S]+$/",$data["production_order_id"])){
-		$errors["production_order_id"]="Invalid production_order_id";
-	}
-	if(!preg_match("/^[\s\S]+$/",$_POST["txtShift"])){
-		$errors["shift"]="Invalid shift";
+	if(!preg_match("/^[\s\S]+$/",$data["production_id"])){
+		$errors["production_id"]="Invalid production_id";
 	}
 	if(!preg_match("/^[\s\S]+$/",$data["produced_qty"])){
 		$errors["produced_qty"]="Invalid produced_qty";
@@ -74,14 +66,12 @@ public function update($data,$file){
 		if(count($errors)==0){
 			$productiondetail=new ProductionDetail();
 			$productiondetail->id=$data["id"];
-		$productiondetail->production_order_id=$data["production_order_id"];
-		$productiondetail->shift=$data["shift"];
+		$productiondetail->production_id=$data["production_id"];
 		$productiondetail->produced_qty=$data["produced_qty"];
 		$productiondetail->operator_name=$data["operator_name"];
-		$productiondetail->log_date=$now;
 		$productiondetail->remarks=$data["remarks"];
-		$productiondetail->created_at=$now;
-		$productiondetail->updated_at=$now;
+		$productiondetail->created_at=$data["created_at"];
+		$productiondetail->updated_at=$data["updated_at"];
 
 		$productiondetail->update();
 		redirect();

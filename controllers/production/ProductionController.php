@@ -12,20 +12,11 @@ public function save($data,$file){
 	if(isset($data["create"])){
 	$errors=[];
 /*
-	if(!preg_match("/^[\s\S]+$/",$data["order_id"])){
-		$errors["order_id"]="Invalid order_id";
-	}
 	if(!preg_match("/^[\s\S]+$/",$data["product_id"])){
 		$errors["product_id"]="Invalid product_id";
 	}
-	if(!preg_match("/^[\s\S]+$/",$data["planned_qty"])){
-		$errors["planned_qty"]="Invalid planned_qty";
-	}
 	if(!preg_match("/^[\s\S]+$/",$data["produced_qty"])){
 		$errors["produced_qty"]="Invalid produced_qty";
-	}
-	if(!preg_match("/^[\s\S]+$/",$data["status"])){
-		$errors["status"]="Invalid status";
 	}
 	if(!preg_match("/^[\s\S]+$/",$data["start_date"])){
 		$errors["start_date"]="Invalid start_date";
@@ -40,16 +31,13 @@ public function save($data,$file){
 */
 		if(count($errors)==0){
 			$production=new Production();
-		$production->order_id=$data["order_id"];
 		$production->product_id=$data["product_id"];
-		$production->planned_qty=$data["planned_qty"];
 		$production->produced_qty=$data["produced_qty"];
-		$production->status=$data["status"];
 		$production->start_date=$data["start_date"];
 		$production->end_date=$data["end_date"];
 		$production->created_by=$data["created_by"];
-		$production->created_at=$now;
-		$production->updated_at=$now;
+		$production->created_at=$data["created_at"];
+		$production->updated_at=$data["updated_at"];
 
 			$production->save();
 		redirect();
@@ -65,20 +53,11 @@ public function update($data,$file){
 	if(isset($data["update"])){
 	$errors=[];
 /*
-	if(!preg_match("/^[\s\S]+$/",$data["order_id"])){
-		$errors["order_id"]="Invalid order_id";
-	}
 	if(!preg_match("/^[\s\S]+$/",$data["product_id"])){
 		$errors["product_id"]="Invalid product_id";
 	}
-	if(!preg_match("/^[\s\S]+$/",$data["planned_qty"])){
-		$errors["planned_qty"]="Invalid planned_qty";
-	}
 	if(!preg_match("/^[\s\S]+$/",$data["produced_qty"])){
 		$errors["produced_qty"]="Invalid produced_qty";
-	}
-	if(!preg_match("/^[\s\S]+$/",$data["status"])){
-		$errors["status"]="Invalid status";
 	}
 	if(!preg_match("/^[\s\S]+$/",$data["start_date"])){
 		$errors["start_date"]="Invalid start_date";
@@ -94,16 +73,13 @@ public function update($data,$file){
 		if(count($errors)==0){
 			$production=new Production();
 			$production->id=$data["id"];
-		$production->order_id=$data["order_id"];
 		$production->product_id=$data["product_id"];
-		$production->planned_qty=$data["planned_qty"];
 		$production->produced_qty=$data["produced_qty"];
-		$production->status=$data["status"];
 		$production->start_date=$data["start_date"];
 		$production->end_date=$data["end_date"];
 		$production->created_by=$data["created_by"];
-		$production->created_at=$now;
-		$production->updated_at=$now;
+		$production->created_at=$data["created_at"];
+		$production->updated_at=$data["updated_at"];
 
 		$production->update();
 		redirect();

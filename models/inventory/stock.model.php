@@ -71,6 +71,8 @@ class Stock extends Model implements JsonSerializable{
 		$stock=$result->fetch_object();
 			return $stock;
 	}
+
+	
 public static function find_report($startDate = '', $endDate = '', $productId = '') {
     global $db, $tx;
 

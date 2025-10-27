@@ -48,16 +48,16 @@ class PurchaseApi
 			$purchasedetail->save();
 
 
-			$stock = new Stock();
-			$stock->product_id = $data["id"];
-			$stock->qty = $data["qty"];
-			$stock->transaction_type_id = 1;
-			$stock->remark = $data["remark"] ?? "";
-			$stock->warehouse_id = $data["warehouse_id"];
-			$stock->created_at = date("Y-m-d H:i:s");
-			$stock->updated_at = date("Y-m-d H:i:s");
-			$stock->lot_id = $data["lot_id"] ?? 12345;
-			$stock->save();
+			// $stock = new Stock();
+			// $stock->product_id = $data["id"];
+			// $stock->qty = $data["qty"];
+			// $stock->transaction_type_id = 1;
+			// $stock->remark = $data["remark"] ?? "";
+			// $stock->warehouse_id = $data["warehouse_id"];
+			// $stock->created_at = date("Y-m-d H:i:s");
+			// $stock->updated_at = date("Y-m-d H:i:s");
+			// $stock->lot_id = $data["lot_id"] ?? 12345;
+			// $stock->save();
 
 			$product = Product::find($data["id"] ?? 0);
 			if (!$product) {
