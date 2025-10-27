@@ -12,7 +12,7 @@ class Order extends Model implements JsonSerializable
 	public $status_id;
 	public $discount;
 	public $vat;
-	public $warehouse_name; // নতুন property
+	public $warehouse_name; 
 	public $created_at;
 	public $updated_at;
 

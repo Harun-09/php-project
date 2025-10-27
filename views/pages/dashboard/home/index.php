@@ -27,7 +27,7 @@
                 </div>
                 <div>
                     <div class="body-text mb-2"><strong>Total Orders</strong></div>
-                    <h4>1,245</h4>
+                    <h4><?php echo Order::count() ?></h4>
                 </div>
             </div>
 

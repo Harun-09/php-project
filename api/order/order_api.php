@@ -42,7 +42,7 @@ class OrderApi
 
 			$stock = new Stock();
 			$stock->product_id = $data["id"];
-			$stock->qty = $data["qty"]*-1;
+			$stock->qty = $data["qty"] * -1;
 			$stock->transaction_type_id = 2;
 			$stock->remark = $data["remark"] ?? "Order #$order_id";
 			$stock->warehouse_id = $data["warehouse_id"] ?? 1;
@@ -51,11 +51,30 @@ class OrderApi
 			$stock->updated_at = date("Y-m-d H:i:s");
 			$stock->save();
 
-			$datauctObj = Product::find($data["id"]);
-			if ($datauctObj) {
-				$datauctObj->stock_qty -= $data["qty"];
-				$datauctObj->updated_at = date("Y-m-d H:i:s");
-				$datauctObj->update();
+			$product = Product::find($data["id"] ?? 0);
+			if (!$product) {
+				$product = new Product();
+				$product->name = $data["name"];
+				$product->category_id = $data["category_id"] ?? 0;
+				$product->uom_id = $data["uom_id"] ?? 0;
+				$product->description = $data["description"] ?? "";
+				$product->brand = $data["brand"] ?? "";
+				$product->is_raw = $data["is_raw"] ?? 1;
+				$product->sku = $data["sku"] ?? "";
+				$product->image = $data["image"] ?? "";
+				$product->stock_qty = $data["qty"];
+				$product->purchase_price = $data["price"];
+				$product->created_at = date("Y-m-d H:i:s");
+				$product->updated_at = date("Y-m-d H:i:s");
+				$product->save();
+			} else {
+				$productObj = new Product();
+				foreach ($product as $key => $value) {
+					$productObj->$key = $value;
+				}
+				$productObj->stock_qty -= $data["qty"];
+				$productObj->updated_at = date("Y-m-d H:i:s");
+				$productObj->update();
 			}
 		}
 

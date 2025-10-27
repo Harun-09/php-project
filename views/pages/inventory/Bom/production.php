@@ -77,7 +77,7 @@
         </div>
         <div class="card-body">
           <form id="bomForm">
-            <!-- Hidden input for product_id -->
+           
             <input type="hidden" id="product_id" name="product_id" value="<?= $bom->product_id ?>">
 
             <!-- <?php var_dump($bom->product_id); ?> -->
@@ -213,7 +213,7 @@
 
   <script>
     $(document).ready(function() {
-      // 1. মূল ডেটা সেটিং (বেস মান)
+      
       $("#bomTable tbody tr").each(function() {
         let qty = parseFloat($(this).find("td:eq(2)").text().replace(/,/g, "")) || 0;
         let cost = parseFloat($(this).find("td:eq(4)").text().replace(/,/g, "")) || 0;
@@ -221,18 +221,16 @@
         $(this).attr("data-unit-cost", cost);
       });
 
-      // 2. টাকা বা ৳ পার্সিং ফাংশন
       function parseBdtAmount(text) {
         return parseFloat(text.replace(/[৳,]/g, '')) || 0;
       }
 
-      // 3. ডাইনামিক ডেটা সেটিং
+      
       $("#laborCost").attr("data-base", parseBdtAmount($("#laborCost").text()));
       $("#overheadCost").attr("data-base", parseBdtAmount($("#overheadCost").text()));
       $("#packagingCost").attr("data-base", parseBdtAmount($("#packagingCost").text()));
       $("#transportCost").attr("data-base", parseBdtAmount($("#transportCost").text()));
 
-      // 4. হিসাব ফাংশন
       function calculateTotals() {
         let qty = parseFloat($("#productQty").val()) || 1;
         let materialGrandTotal = 0;
@@ -251,7 +249,7 @@
         $("#tfootMaterialTotal").text(materialGrandTotal.toFixed(2));
         $("#totalMaterialCost").text(materialGrandTotal.toFixed(2));
 
-        // অতিরিক্ত খরচ
+       
         let labor = parseFloat($("#laborCost").attr("data-base")) * qty;
         let overhead = parseFloat($("#overheadCost").attr("data-base")) * qty;
         let packaging = parseFloat($("#packagingCost").attr("data-base")) * qty;
@@ -265,36 +263,35 @@
         let totalExtra = labor + overhead + packaging + transport;
         $("#totalExtraCost").text("৳ " + totalExtra.toFixed(2));
 
-        // মোট খরচ
+       
         let grandTotal = materialGrandTotal + totalExtra;
         $("#grandTotal").text("৳ " + grandTotal.toFixed(2));
       }
 
-      // 5. ইনপুট পরিবর্তনে হিসাব আপডেট
+   
       $(document).on("input", "#productQty", calculateTotals);
       calculateTotals();
 
-      // 6. ডেটা পাঠানোর জন্য
       $("#saveBtn").on("click", function() {
-        // প্রোডাক্টের নাম ও কোড
+     
         let product_name = $("#product_name").val();
         let product_code = $("input[name='product_code']").val();
 
 
-        // product_id from hidden input
+      
         let product_id = parseInt($("#product_id").val());
         if (isNaN(product_id)) {
-          alert("প্রোডাক্ট আইডি নেই বা ভুল");
+          alert("");
           return;
         }
 
-        // ডেটা যাচাই
+   
         if (!product_id) {
-          alert("প্রোডাক্ট আইডি নেই। দয়া করে নিশ্চিত করুন যে, এটি ডেটা পাঠানো হচ্ছে।");
+          alert("");
           return;
         }
 
-        // উপাদান ডেটা সংগ্রহ
+   
         let components = [];
         $("#bomTable tbody tr").each(function() {
           let productName = $(this).find("td:eq(1)").text().trim();
@@ -308,28 +305,27 @@
             id: $(this).data("product-id"),
             produced_qty: parseFloat($(this).find("td:eq(2)").text().replace(/,/g, "")) || 0,
             qty: parseFloat($(this).find("td:eq(2)").text().replace(/,/g, "")) || 0,
-            operator_name: "", // optional, backend default ""
-            remarks: "", // optional
+            operator_name: "", 
+            remarks: "", 
             warehouse_id: 1
           });
 
           console.log("Components:", components);
         });
 
-        // অতিরিক্ত খরচের মান
         let labor = parseBdtAmount($("#laborCost").text());
         let overhead = parseBdtAmount($("#overheadCost").text());
         let packaging = parseBdtAmount($("#packagingCost").text());
         let transport = parseBdtAmount($("#transportCost").text());
 
-        // মোট খরচ
+       
         let total_cost = labor + overhead + packaging + transport + components.reduce((a, b) => a + b.total, 0);
         let produced_qty = parseFloat($("#productQty").val()) || 1;
 
         if (isNaN(produced_qty)) {
           produced_qty = 1;
         }
-        // ডেটা অবজেক্ট পাঠানো
+       
         let data = {
           product_name,
           product_id: parseInt($("#product_id").val()),
@@ -342,7 +338,7 @@
         console.log(data);
         // console.log("product_id value before sending:", $("#product_id").val());
 
-        // AJAX কল
+        
         $.ajax({
           url: "<?= $base_url ?>/api/production/save",
           type: "POST",
@@ -351,11 +347,11 @@
 
           success: function(res) {
             console.log("Sending payload:", data);
-            alert("প্রোডাকশন সফলভাবে সংরক্ষিত হয়েছে!");
+            alert("");
           },
           error: function(err) {
             console.error("AJAX Error:", err);
-            alert("সঞ্চয় করতে সমস্যা হয়েছে, কনসোলে দেখুন।");
+            alert("");
           }
         });
       });

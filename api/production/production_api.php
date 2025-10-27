@@ -30,6 +30,7 @@ class ProductionApi
 	}
 	function save($data, $file = [])
 	{
+		// === Main Production Save ===
 		$production = new Production();
 		$production->product_id = $data["product_id"];
 		$production->produced_qty = $data["produced_qty"];
@@ -38,12 +39,11 @@ class ProductionApi
 		$production->created_by = $data["created_by"] ?? 1;
 		$production->created_at = date("Y-m-d H:i:s");
 		$production->updated_at = date("Y-m-d H:i:s");
-		
-		$production_id =$production->save();
+		$production_id = $production->save();
 
-
-
+		// === 1️⃣ RAW MATERIAL CONSUMPTION ===
 		foreach ($data["components"] as $component) {
+			// Save production detail
 			$productionDetail = new ProductionDetail();
 			$productionDetail->production_id = $production_id;
 			$productionDetail->produced_qty = $component["qty"];
@@ -53,17 +53,46 @@ class ProductionApi
 			$productionDetail->updated_at = date("Y-m-d H:i:s");
 			$productionDetail->save();
 
-			$stock = new Stock();
-			$stock->product_id = $component["id"];
-			$stock->qty = $component["produced_qty"];
-			$stock->transaction_type_id = 1;
-			$stock->remark = $component["remarks"] ?? "";
-			$stock->warehouse_id = $component["warehouse_id"] ?? 1;
-			$stock->created_at = date("Y-m-d H:i:s");
-			$stock->updated_at = date("Y-m-d H:i:s");
-			$stock->lot_id = $component["lot_id"] ?? 12345;
-			$stock->save();
+			// Raw Material deduction
+			$product = Product::find($component["id"]);
+			if ($product && $product->is_raw == 1) {
+				$productObj = new Product();
+				foreach ($product as $key => $value) {
+					$productObj->$key = $value;
+				}
+
+				// Raw materials কমবে
+				$productObj->stock_qty -= floatval($component["qty"]);
+				$productObj->updated_at = date("Y-m-d H:i:s");
+				$productObj->update();
+			}
 		}
+
+		// === 2️⃣ FINISHED PRODUCT STOCK INCREASE ===
+		$finishedProduct = Product::find($data["product_id"]);
+		if ($finishedProduct) {
+			$finishedProductObj = new Product();
+			foreach ($finishedProduct as $key => $value) {
+				$finishedProductObj->$key = $value;
+			}
+
+			// Finished product এর stock বাড়বে
+			$finishedProductObj->stock_qty += floatval($data["produced_qty"]);
+			$finishedProductObj->updated_at = date("Y-m-d H:i:s");
+			$finishedProductObj->update();
+		}
+
+		// === 3️⃣ STOCK ENTRY ONLY FOR FINISHED PRODUCT ===
+		$stock = new Stock();
+		$stock->product_id = $data["product_id"];
+		$stock->qty = floatval($data["produced_qty"]);
+		$stock->transaction_type_id = 1; // production in
+		$stock->remark = "Production Output";
+		$stock->warehouse_id = $data["warehouse_id"] ?? 1;
+		$stock->created_at = date("Y-m-d H:i:s");
+		$stock->updated_at = date("Y-m-d H:i:s");
+		$stock->lot_id = $data["lot_id"] ?? 12345;
+		$stock->save();
 
 		echo json_encode(["success" => "yes", "production_id" => $production_id]);
 	}
@@ -81,7 +110,6 @@ class ProductionApi
 		$production->produced_qty = floatval($data["produced_qty"] ?? $production->produced_qty);
 		$production->start_date = $data["start_date"];
 		$production->end_date = $data["end_date"];
-
 		$production->updated_at = date("Y-m-d H:i:s");
 		$production->update();
 
