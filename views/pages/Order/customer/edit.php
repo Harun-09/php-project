@@ -1,5 +1,5 @@
 <?php
-echo Page::title(["title"=>"Edit Customer"]);
+echo "<table class='table' style='background: transparent !important; color: #fff !important;'>";
 echo Page::body_open();
 echo Html::link(["class"=>"btn btn-success", "route"=>"customer", "text"=>"Manage Customer"]);
 echo Page::context_open();

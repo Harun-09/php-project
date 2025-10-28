@@ -28,13 +28,14 @@ public function save($data,$file){
 */
 		if(count($errors)==0){
 			$customer=new Customer();
+			     $now = date('Y-m-d H:i:s');
+
 		$customer->name=$data["name"];
 		$customer->phone=$data["phone"];
 		$customer->email=$data["email"];
 		$customer->address=$data["address"];
-		$customer->created_at=$data["created_at"];
-		$customer->updated_at=$data["updated_at"];
-
+		   $now;
+        $now;
 			$customer->save();
 		redirect();
 		}else{
@@ -72,7 +73,6 @@ public function update($data,$file){
 		$customer->address=$data["address"];
 		$customer->created_at=$data["created_at"];
 		$customer->updated_at=$data["updated_at"];
-
 		$customer->update();
 		redirect();
 		}else{

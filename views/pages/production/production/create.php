@@ -1,5 +1,5 @@
 <?php
-echo Page::title(["title"=>"Create Production"]);
+// echo Page::title(["title"=>"Create Production"]);
 echo Page::body_open();
 echo Html::link(["class"=>"btn btn-success", "route"=>"production", "text"=>"Manage Production"]);
 echo Page::context_open();

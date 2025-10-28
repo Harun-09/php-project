@@ -19,7 +19,15 @@
  <!-- /#page -->
  </div>
  <!-- /#wrapper -->
+<script>
+  const themeToggle = document.querySelector(".button-dark-light");
+const body = document.getElementById("themeBody");
 
+themeToggle.addEventListener("click", () => {
+    body.classList.toggle("dark-theme");
+});
+
+</script>
  <!-- Javascript  -->
  <script src="<?= $base_url ?>/assets/js/jquery.min.js"></script>
  <script src="<?= $base_url ?>/assets/js/bootstrap.min.js"></script>

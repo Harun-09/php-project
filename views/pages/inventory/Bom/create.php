@@ -50,7 +50,7 @@
 
 <div class="container mt-4">
 	<h2>Create BOM</h2>
-	<a href="<?= $base_url ?>/bom/index" class="btn btn-secondary mb-2">Back to List</a>
+	    <a href="<?= $base_url ?>/bom/index" class="back_list mb-2 text-end float-end">Back to List</a>
 	<form id="bomForm">
 		<div class="row mb-3">
 			<div class="col-md-4">

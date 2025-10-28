@@ -65,7 +65,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/5.3.5/apexcharts.min.js" integrity="sha512-dC9VWzoPczd9ppMRE/FJohD2fB7ByZ0VVLVCMlOrM2LHqoFFuVGcWch1riUcwKJuhWx8OhPjhJsAHrp4CP4gtw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
-<body class="body">
+<body class="body" id="themeBody">
 
     <!-- #wrapper -->
     <div id="wrapper">

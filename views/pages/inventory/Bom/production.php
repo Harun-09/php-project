@@ -72,6 +72,8 @@
     <div class="container py-5">
       <div class="card">
         <a href="<?= $base_url ?>/bom/index" class="back_list mb-2">Back to List</a>
+         <a href="<?= $base_url ?>/production/index" class="production_list mb-2 text-end float-end">Go to Production List</a>
+        <div class="card-header">
         <div class="card-header">
           <h4 class="mb-0">🏭 BOM Form with Full Expense Summary</h4>
         </div>

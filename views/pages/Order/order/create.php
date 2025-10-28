@@ -264,7 +264,7 @@
 <body>
   <div class="order-form">
     <div class="header-box">
-      <h2>Create Order & Generate Invoice</h2>
+      <h2>Create Order</h2>
     </div>
 
     <form id="orderForm" action="create.php" method="post">
@@ -383,7 +383,7 @@
 
 
         <div class="actions">
-          <button type="button" class="btn-success create " id="saveBtn">➕ Create order & generate invoice</button>
+          <button type="button" class="btn-success create " id="saveBtn">➕ Create order</button>
           <button type="reset" class="btn-secondary reset">Reset</button>
         </div>
       </div>
