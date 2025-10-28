@@ -1,8 +1,8 @@
 <!-- section-menu-left -->
 <div class="section-menu-left">
   <div class="box-logo">
-    <a href="<?= $base_url ?>/home" id="site-logo-inner">
-      <img class="" id="logo_header" alt="" src="<?= $base_url ?>/assets/images/logo/logo.png" data-light="<?= $base_url ?>/assets/images/logo/logo.png" data-dark="<?= $base_url ?>/assets/images/logo/logo-dark.png">
+    <a href="index.php" id="site-logo-inner">
+      <img class="" id="logo_header" alt="" src="<?= $base_url ?>/assets/images/logo/logo.png" data-light="<?= $base_url ?>/assets/images/logo/logo.png" data-dark="<?= $base_url ?>/assets/images/logo/logo-dark.png" >
     </a>
     <div class="button-show-hide">
       <i class="icon-menu-left"></i>
@@ -14,12 +14,11 @@
         <div class="center-heading">Main Home</div>
         <ul class="menu-list">
           <li class="menu-item has-children">
-            <a href="javascript:void(0);" class="menu-item-button" onclick="window.location='<?= $base_url ?>/home'">
+            <a href="javascript:void(0);" class="menu-item-button">
               <div class="icon"><i class="icon-grid"></i></div>
               <div class="text">Dashboard</div>
             </a>
-
-            <!-- <ul class="sub-menu">
+            <ul class="sub-menu">
               <li class="sub-menu-item">
                 <a href="index.html" class="active">
                   <div class="text">Home 01</div>
@@ -55,7 +54,7 @@
                   <div class="text">Home Menu Icon Default</div>
                 </a>
               </li>
-            </ul> -->
+            </ul>
           </li>
         </ul>
       </div>

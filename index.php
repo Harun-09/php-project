@@ -1,11 +1,11 @@
 <?php session_start();  
 
-//  $base_url="harun.intelsofts.com/php";
+//  $base_url="http://harun.intelsofts.com/php";
   //  $base_url="http://localhost/php";
   //require_once("library/classes/system_log.class.php");
   //  $db=new mysqli("localhost","harun","6587@;;","wdpf66_harun");
-    $db=new mysqli("localhost","root","","wdpf66_harun");
-    $tx="core_";
+    // $db=new mysqli("localhost","root","","wdpf66_harun");
+    // $tx="core_";
    
 // echo password_hash("admin123", PASSWORD_DEFAULT);
 
