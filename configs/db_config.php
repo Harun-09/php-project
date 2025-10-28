@@ -1,16 +1,16 @@
 <?php   
    //Remote
    
-    //  define("SERVER","localhost");
-    //  define("USER","root");
-    //  define("DATABASE","wdpf66_harun");
-    //  define("PASSWORD","");
-
-
-       define("SERVER","localhost");
-     define("USER","harun");
+     define("SERVER","localhost");
+     define("USER","root");
      define("DATABASE","wdpf66_harun");
-     define("PASSWORD","6587@;;");
+     define("PASSWORD","");
+
+
+    //    define("SERVER","localhost");
+    //  define("USER","harun");
+    //  define("DATABASE","wdpf66_harun");
+    //  define("PASSWORD","6587@;;");
 
    //Local
    
